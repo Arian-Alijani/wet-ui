@@ -34,6 +34,9 @@
     --line:rgba(15,15,15,.09);
     --frame-bg:#f7f7f5;
 
+    /* unified vertical rhythm between sections (equal + compact) */
+    --sec-space:clamp(64px,8vw,104px);
+
     /* rotating pill tokens */
     --pill-bg:#d3f5d8;
     --pill-dot:#22a447;
@@ -288,7 +291,9 @@
   /* =========================================================
      Shared section primitives
      ========================================================= */
-  .sec{padding:clamp(96px,14vw,168px) 24px 0}
+  .sec{padding:var(--sec-space) 24px 0}
+  /* the final section closes the page with the same rhythm at the bottom */
+  .sec:last-of-type{padding-bottom:var(--sec-space)}
   .wrap{max-width:1240px;margin:0 auto}
   .eyebrow{
     display:inline-flex;align-items:center;gap:8px;
@@ -363,7 +368,6 @@
   /* =========================================================
      Live sync — two accounts, relay playback
      ========================================================= */
-  .sync{padding-bottom:clamp(96px,14vw,168px)}
   .sync-head{text-align:center;display:flex;flex-direction:column;align-items:center}
   .sync-head .lead{margin-inline:auto}
 
@@ -560,19 +564,25 @@
      Offline-first resilience
      ========================================================= */
   .resilience{position:relative}
-  .res-head{text-align:center;display:flex;flex-direction:column;align-items:center}
-  .res-head .eyebrow{justify-content:center}
-  .res-head .lead{margin-inline:auto;max-width:640px}
+  /* two columns: text on the right (RTL start), compact scene box on the left (end) */
+  .res-grid{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);
+    gap:clamp(32px,5vw,72px);align-items:center;
+  }
+  .res-head{text-align:start;display:flex;flex-direction:column;align-items:flex-start}
+  .res-head .eyebrow{justify-content:flex-start}
+  .res-head .lead{margin-inline:0;max-width:560px}
 
   .res-stage{
     --accent:#22a447;
     --accent-soft:rgba(34,164,71,.14);
     --warn:#e0872a;
     --warn-soft:rgba(224,135,42,.14);
-    margin-top:clamp(44px,5.5vw,72px);
+    margin-top:0;
+    width:100%;
     position:relative;
-    padding:clamp(28px,4vw,52px) clamp(18px,3vw,40px) clamp(24px,3vw,40px);
-    border-radius:28px;
+    padding:clamp(22px,3vw,34px) clamp(16px,2.4vw,26px) clamp(20px,2.4vw,28px);
+    border-radius:24px;
     background:
       radial-gradient(120% 140% at 50% -20%,#fbfbfa,transparent 60%),
       #ffffff;
@@ -620,7 +630,7 @@
 
   /* the scene: cloud (top) — line (middle) — device (bottom) */
   .res-scene{
-    margin-top:clamp(52px,6vw,72px);
+    margin-top:clamp(40px,4.5vw,54px);
     display:flex;flex-direction:column;align-items:center;
   }
 
@@ -790,6 +800,15 @@
     100%{bottom:100%;opacity:0}
   }
   @keyframes rPing{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+
+  @media (max-width:900px){
+    /* stack: text on top, scene box centered below */
+    .res-grid{grid-template-columns:1fr;gap:clamp(36px,6vw,56px);justify-items:center}
+    .res-head{text-align:center;align-items:center}
+    .res-head .eyebrow{justify-content:center}
+    .res-head .lead{margin-inline:auto}
+    .res-stage{max-width:460px}
+  }
 
   @media (max-width:640px){
     .res-steps{grid-template-columns:1fr}
@@ -1067,8 +1086,8 @@
   /* plan grid — featured (middle) card sits slightly taller & centered */
   .plans{
     margin-top:clamp(48px,5.2vw,72px);
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:clamp(18px,1.8vw,26px);align-items:center;
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:clamp(16px,1.5vw,22px);align-items:center;
   }
   .plan{
     position:relative;display:flex;flex-direction:column;
@@ -1124,6 +1143,14 @@
   }
   .p-badge svg{width:12px;height:12px}
 
+  /* "free" tag for the demo plan */
+  .p-tag{
+    position:absolute;top:clamp(20px,2vw,28px);inset-inline-end:clamp(20px,2vw,28px);
+    display:inline-flex;align-items:center;height:24px;padding:0 11px;border-radius:999px;
+    background:#e6f7eb;color:#12894a;font:700 12px/1 "Vazirmatn",sans-serif;
+  }
+  .plan-demo{border-style:dashed;border-color:rgba(34,164,71,.42)}
+
   .p-top{min-height:66px}
   .p-name{font-size:19px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
   .p-desc{margin-top:7px;font-size:13.5px;line-height:1.7;color:var(--muted)}
@@ -1178,9 +1205,12 @@
   }
   .pricing-foot svg{width:14px;height:14px;vertical-align:-2px;margin-inline-end:5px;opacity:.7}
 
-  @media (max-width:900px){
-    .plans{grid-template-columns:1fr;max-width:440px;margin-inline:auto;align-items:stretch}
-    .plan.feat{order:-1;padding-block:clamp(30px,3.4vw,40px)}
+  @media (max-width:1100px){
+    .plans{grid-template-columns:repeat(2,minmax(0,1fr));max-width:740px;margin-inline:auto;align-items:stretch}
+  }
+  @media (max-width:640px){
+    .plans{grid-template-columns:1fr;max-width:440px}
+    .plan.feat{padding-block:clamp(30px,3.4vw,40px)}
   }
 
   @media (max-width:640px){
@@ -1248,12 +1278,22 @@
               <line x1="0" y1="0" x2="0" y2="4.5" stroke="#0f0f0f" stroke-width="1.3"/>
             </pattern>
             <path id="ctailBase" d="M84 114 C98 116 104 128 100 142 C97 152 90 156 92 164">
-              <animate class="idle-sway" attributeName="d" dur="5.2s" repeatCount="indefinite" calcMode="spline"
-                keyTimes="0;.25;.5;.75;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1"
+              <!-- Natural, automatic cat-tail motion: a relaxed low sway with an
+                   occasional lively tip-flick, so it reads like a real resting cat
+                   rather than a pointer-driven magnet. The base anchor (M84 114)
+                   stays pinned to the body; only the hanging length moves. -->
+              <animate class="idle-sway" attributeName="d" dur="7.8s" repeatCount="indefinite" calcMode="spline"
+                keyTimes="0;.12;.26;.4;.5;.58;.66;.78;.9;1"
+                keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.37 0 .2 1;.2 0 .25 1;.3 0 .3 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1"
                 values="M84 114 C98 116 104 128 100 142 C97 152 90 156 92 164;
-                        M84 114 C100 118 101 131 97 144 C94 154 99 160 106 161;
+                        M84 114 C99 117 103 130 99 143 C96 153 95 158 99 162;
+                        M84 114 C100 118 101 132 96 145 C93 155 100 160 107 161;
+                        M84 114 C99 117 102 131 98 144 C95 154 96 159 100 162;
                         M84 114 C98 116 104 128 100 142 C97 152 90 156 92 164;
-                        M84 114 C97 115 107 126 105 140 C103 151 95 158 87 159;
+                        M84 114 C97 115 106 126 103 139 C101 149 91 154 85 156;
+                        M84 114 C96 115 108 124 106 138 C104 150 95 157 87 160;
+                        M84 114 C97 115 106 127 102 141 C99 151 92 157 90 162;
+                        M84 114 C98 116 104 129 100 143 C97 152 91 157 93 163;
                         M84 114 C98 116 104 128 100 142 C97 152 90 156 92 164"/>
             </path>
           </defs>
@@ -1410,6 +1450,7 @@
   <!-- ================= Offline-first resilience ================= -->
   <section class="sec resilience" id="resilience" aria-labelledby="res-title" data-screen-label="Offline first">
     <div class="wrap">
+     <div class="res-grid">
       <header class="res-head reveal">
         <span class="eyebrow">آنلاین و آفلاین</span>
         <h2 class="h2" id="res-title">اینترنت قطع شود، کارِ شما قطع نمی‌شود</h2>
@@ -1495,6 +1536,7 @@
           </div>
         </div>
       </div>
+     </div>
     </div>
   </section>
 
@@ -1683,8 +1725,32 @@
       </header>
 
       <div class="plans reveal">
+        <!-- Demo (2-week free trial) -->
+        <article class="plan plan-demo" data-plan="demo" style="--d:0ms">
+          <span class="p-tag">رایگان</span>
+          <div class="p-top">
+            <h3 class="p-name">دمو دو هفته‌ای</h3>
+            <p class="p-desc">دو هفته استفادهٔ کامل و رایگان؛ بدون نیاز به کارت بانکی.</p>
+          </div>
+          <span class="p-users">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            تا ۲ کاربر هم‌زمان
+          </span>
+          <div class="p-price">
+            <span class="p-amount">۰<span class="cur">تومان</span></span>
+            <span class="p-period">/ ۱۴ روز</span>
+          </div>
+          <p class="p-old">بدون تعهد و بدون پرداخت</p>
+          <a class="p-cta" href="#demo">فعال‌سازی دمو</a>
+          <ul class="p-feat">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>دسترسی کامل به همهٔ امکانات</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>راه‌اندازی در کمتر از ۱۰ دقیقه</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبانی آنلاین در دورهٔ دمو</li>
+          </ul>
+        </article>
+
         <!-- Monthly -->
-        <article class="plan" data-plan="monthly" style="--d:0ms">
+        <article class="plan" data-plan="monthly" style="--d:90ms">
           <div class="p-top">
             <h3 class="p-name">ماهانه</h3>
             <p class="p-desc">مناسب شروع کار و آشنایی کامل با امکانات وت پلاس.</p>
@@ -1707,7 +1773,7 @@
         </article>
 
         <!-- Yearly (featured / recommended) -->
-        <article class="plan feat" data-plan="yearly" style="--d:90ms">
+        <article class="plan feat" data-plan="yearly" style="--d:180ms">
           <span class="p-badge">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             پیشنهاد ویژه
@@ -1735,7 +1801,7 @@
         </article>
 
         <!-- 6-month -->
-        <article class="plan" data-plan="half" style="--d:180ms">
+        <article class="plan" data-plan="half" style="--d:270ms">
           <div class="p-top">
             <h3 class="p-name">شش‌ماهه</h3>
             <p class="p-desc">تعادل عالی قیمت و مدت؛ مناسب کلینیک‌های رو‌به‌رشد.</p>
@@ -1864,154 +1930,6 @@
     if(document.hidden && cur) cur.v.pause();
     else if(!document.hidden && visible && cur) play();
   });
-})();
-(function(){
-  /* ----------------------------------------------------------------
-     Cat tail "magnet" — a true proximity magnet. The tail tip is
-     continuously drawn toward the pointer whenever it is within a
-     field radius around the tail (measured in SVG units), with the
-     pull strength falling off smoothly with distance. There is no
-     need to hover exactly over the thin tail stroke — the tail
-     reaches out to meet the cursor like a magnet, then springs back
-     with soft damping once the pointer moves out of range.
-     ---------------------------------------------------------------- */
-  const cat  = document.querySelector('.pet-cat');
-  const svg  = cat && cat.querySelector('svg');
-  const base = document.getElementById('ctailBase');      // visible tail paths (via <use>)
-  if(!cat || !svg || !base) return;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  // Pause / resume the idle SMIL sway so it doesn't fight the magnet.
-  // (The idle sway is the only SMIL animation inside this SVG; the blink
-  //  and head tilt are CSS, so pausing the SVG timeline is safe here.)
-  let swayPaused = false;
-  function pauseSway(){ if(swayPaused) return; try{ svg.pauseAnimations(); swayPaused = true; }catch(e){} }
-  function resumeSway(){ if(!swayPaused) return; try{ svg.unpauseAnimations(); swayPaused = false; }catch(e){} }
-
-  // Fixed anchor of the tail where it leaves the body (SVG user units).
-  const ROOT = {x:84, y:114};
-  // Rest control points of the hanging tail (matches the base "d").
-  const REST = {
-    c1:{x:98,  y:116},
-    c2:{x:104, y:128},
-    mid:{x:100,y:142},
-    c3:{x:97,  y:152},
-    c4:{x:90,  y:156},
-    tip:{x:92, y:164}
-  };
-
-  // How hard the tail is being pulled, 0..1 (eased toward target each frame).
-  let pull = 0, pullTarget = 0;
-  // Direction the pointer is relative to the tail tip (SVG units).
-  let dirX = 0, dirY = 0, dirXT = 0, dirYT = 0;
-  let raf = 0, idle = true;
-
-  // Magnet field, in SVG user units. The pull reaches full strength when the
-  // pointer is at/inside FIELD_IN of the tail tip and fades to zero at FIELD_OUT.
-  const FIELD_IN  = 14;     // within this radius -> full pull
-  const FIELD_OUT = 150;    // beyond this radius -> no pull (magnet disengages)
-
-  // Convert a client point into the svg's viewBox coordinate space.
-  function toSvg(cx, cy){
-    const r = svg.getBoundingClientRect();
-    const vb = svg.viewBox.baseVal;
-    return {
-      x: (cx - r.left) / r.width  * vb.width,
-      y: (cy - r.top)  / r.height * vb.height
-    };
-  }
-
-  // Build the tail "d" given current pull + direction, with a little
-  // natural curvature so it arcs toward the finger instead of pointing straight.
-  function buildPath(){
-    const p = pull;
-    // the tip is displaced toward the pointer, capped so it stays natural
-    const reach = 26 * p;                       // max travel of the tip (svg units)
-    const tipX = REST.tip.x + dirX * reach;
-    const tipY = REST.tip.y + dirY * reach;
-    // mid of the tail follows ~45% of the way, giving a smooth bend
-    const midX = REST.mid.x + dirX * reach * 0.42;
-    const midY = REST.mid.y + dirY * reach * 0.42;
-    // control points lerp toward a gentle S that leads into the bend
-    const c2X = REST.c2.x + dirX * reach * 0.30;
-    const c2Y = REST.c2.y + dirY * reach * 0.30;
-    const c3X = REST.c3.x + dirX * reach * 0.55;
-    const c3Y = REST.c3.y + dirY * reach * 0.55;
-    const c4X = REST.c4.x + dirX * reach * 0.80;
-    const c4Y = REST.c4.y + dirY * reach * 0.80;
-    return `M${ROOT.x} ${ROOT.y} C${REST.c1.x} ${REST.c1.y} ${c2X.toFixed(1)} ${c2Y.toFixed(1)} ${midX.toFixed(1)} ${midY.toFixed(1)} C${c3X.toFixed(1)} ${c3Y.toFixed(1)} ${c4X.toFixed(1)} ${c4Y.toFixed(1)} ${tipX.toFixed(1)} ${tipY.toFixed(1)}`;
-  }
-
-  function applyPath(d){
-    base.setAttribute('d', d);
-  }
-
-  function loop(){
-    raf = 0;
-    // ease pull & direction toward their targets (spring-ish damping)
-    pull += (pullTarget - pull) * 0.14;
-    dirX += (dirXT - dirX) * 0.18;
-    dirY += (dirYT - dirY) * 0.18;
-
-    if(pull > 0.004 || pullTarget > 0.004){
-      pauseSway();                 // freeze idle sway so JS drives the tail
-      applyPath(buildPath());
-      idle = false;
-      raf = requestAnimationFrame(loop);
-    } else if(!idle){
-      // fully settled: hand the tail back to the idle SMIL sway cleanly
-      pull = 0;
-      resumeSway();                // idle sway takes over the "d" again
-      idle = true;
-    }
-  }
-  function kick(){ if(!raf) raf = requestAnimationFrame(loop); }
-
-  // Distance from a point to the resting tail, sampled along the rest curve so
-  // the magnet engages near ANY part of the tail — not only the tip.
-  const SAMPLES = (function(){
-    const pts = [];
-    const B = (a,b,c,d,t)=>{ const u=1-t; return u*u*u*a + 3*u*u*t*b + 3*u*t*t*c + t*t*t*d; };
-    // first cubic: ROOT -> c1,c2 -> mid ; second cubic: mid -> c3,c4 -> tip
-    for(let t=0;t<=1;t+=0.1){
-      pts.push({ x:B(ROOT.x,REST.c1.x,REST.c2.x,REST.mid.x,t), y:B(ROOT.y,REST.c1.y,REST.c2.y,REST.mid.y,t) });
-    }
-    for(let t=0;t<=1;t+=0.1){
-      pts.push({ x:B(REST.mid.x,REST.c3.x,REST.c4.x,REST.tip.x,t), y:B(REST.mid.y,REST.c3.y,REST.c4.y,REST.tip.y,t) });
-    }
-    return pts;
-  })();
-  function nearestOnTail(p){
-    let best = Infinity;
-    for(const s of SAMPLES){ const d = Math.hypot(p.x-s.x, p.y-s.y); if(d < best) best = d; }
-    return best;
-  }
-
-  // Continuous magnet: update pull/direction from the pointer's proximity to the
-  // tail. The tail tip is always aimed at the pointer; strength eases in with
-  // proximity and out as the pointer leaves the field — no hover gate.
-  function updateFromPointer(cx, cy){
-    const p = toSvg(cx, cy);
-    // direction: tip always reaches toward the pointer
-    const dx = p.x - REST.tip.x;
-    const dy = p.y - REST.tip.y;
-    const dist = Math.hypot(dx, dy) || 1;
-    dirXT = dx / dist;
-    dirYT = dy / dist;
-    // strength: based on nearest distance to the whole tail, smooth falloff
-    const near = nearestOnTail(p);
-    const t = (FIELD_OUT - near) / (FIELD_OUT - FIELD_IN);
-    const s = Math.max(0, Math.min(1, t));
-    pullTarget = s * s * (3 - 2 * s);   // smoothstep for an organic magnet feel
-    kick();
-  }
-
-  addEventListener('pointermove', (e)=>updateFromPointer(e.clientX, e.clientY), {passive:true});
-
-  // release cleanly when the pointer leaves the window / lifts
-  addEventListener('pointerup', ()=>{ pullTarget = 0; kick(); }, {passive:true});
-  document.addEventListener('pointerleave', ()=>{ pullTarget = 0; kick(); });
-  window.addEventListener('blur', ()=>{ pullTarget = 0; kick(); });
 })();
 (function(){
   const cat = document.querySelector('.pet-cat');
