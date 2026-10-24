@@ -240,7 +240,6 @@
 
   /* ---------- hover interactions ---------- */
   .pet .hit{fill:transparent;stroke:none;pointer-events:all;cursor:pointer}
-  .pet .hit-tail{fill:none;stroke:transparent;stroke-width:30;pointer-events:stroke;cursor:pointer}
 
   .pet .happy{opacity:0;transition:opacity .25s ease}
   .pet .open{transition:opacity .2s ease}
@@ -558,6 +557,254 @@
   }
 
   /* =========================================================
+     Offline-first resilience
+     ========================================================= */
+  .resilience{position:relative}
+  .res-head{text-align:center;display:flex;flex-direction:column;align-items:center}
+  .res-head .eyebrow{justify-content:center}
+  .res-head .lead{margin-inline:auto;max-width:640px}
+
+  .res-stage{
+    --accent:#22a447;
+    --accent-soft:rgba(34,164,71,.14);
+    --warn:#e0872a;
+    --warn-soft:rgba(224,135,42,.14);
+    margin-top:clamp(44px,5.5vw,72px);
+    position:relative;
+    padding:clamp(28px,4vw,52px) clamp(18px,3vw,40px) clamp(24px,3vw,40px);
+    border-radius:28px;
+    background:
+      radial-gradient(120% 140% at 50% -20%,#fbfbfa,transparent 60%),
+      #ffffff;
+    border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(15,15,15,.03),0 30px 70px -40px rgba(15,15,15,.2);
+    overflow:hidden;
+  }
+  /* soft animated background grid */
+  .res-stage::before{
+    content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(to right,rgba(15,15,15,.035) 1px,transparent 1px),
+      linear-gradient(to bottom,rgba(15,15,15,.035) 1px,transparent 1px);
+    background-size:34px 34px;
+    -webkit-mask-image:radial-gradient(120% 90% at 50% 0%,#000,transparent 72%);
+    mask-image:radial-gradient(120% 90% at 50% 0%,#000,transparent 72%);
+    opacity:.8;
+  }
+  .res-stage > *{position:relative;z-index:1}
+
+  /* status pill at the top of the stage */
+  .res-status{
+    position:absolute;top:clamp(16px,2.2vw,22px);inset-inline-start:50%;transform:translateX(50%);
+    display:inline-flex;align-items:center;gap:9px;
+    height:34px;padding:0 15px;border-radius:999px;
+    background:rgba(255,255,255,.9);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border:1px solid var(--line);
+    font-size:13px;font-weight:600;color:var(--ink-2);
+    box-shadow:0 8px 24px -14px rgba(15,15,15,.3);
+    transition:color .4s ease,border-color .4s ease;white-space:nowrap;
+  }
+  .res-status .rs-dot{
+    width:9px;height:9px;border-radius:50%;background:var(--accent);position:relative;
+    transition:background-color .4s ease;
+  }
+  .res-status .rs-dot::after{
+    content:"";position:absolute;inset:-5px;border-radius:50%;
+    border:1.6px solid var(--accent);opacity:0;
+    animation:rPing 1.8s cubic-bezier(0,0,.2,1) infinite;
+  }
+  .res-stage[data-state="offline"] .rs-dot{background:var(--warn)}
+  .res-stage[data-state="offline"] .rs-dot::after{border-color:var(--warn);animation:none;opacity:0}
+  .res-stage[data-state="restored"] .rs-dot{background:var(--accent)}
+
+  /* the scene: cloud (top) — line (middle) — device (bottom) */
+  .res-scene{
+    margin-top:clamp(52px,6vw,72px);
+    display:flex;flex-direction:column;align-items:center;
+  }
+
+  /* --- Cloud --- */
+  .r-cloud{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .r-cloud svg{width:clamp(96px,13vw,128px);height:auto;overflow:visible}
+  .cl-body{
+    fill:#f3f3f1;stroke:#d9d8d4;stroke-width:2;
+    transition:fill .5s ease,stroke .5s ease,opacity .5s ease;
+  }
+  .res-stage[data-state="online"] .cl-body,
+  .res-stage[data-state="restored"] .cl-body{fill:#e7f7ec;stroke:rgba(34,164,71,.5)}
+  .res-stage[data-state="offline"] .r-cloud{opacity:.55}
+  .r-cloud-label{font-size:12.5px;font-weight:600;color:var(--muted)}
+  .r-cloud-sync{
+    position:absolute;top:calc(50% - 4px);inset-inline-start:50%;transform:translate(50%,-50%) scale(.5);
+    width:30px;height:30px;border-radius:50%;
+    display:grid;place-items:center;
+    background:var(--accent);color:#fff;
+    box-shadow:0 8px 18px -8px rgba(34,164,71,.9);
+    opacity:0;transition:opacity .35s ease,transform .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .r-cloud-sync svg{width:16px;height:16px}
+  .res-stage.synced .r-cloud-sync{opacity:1;transform:translate(50%,-50%) scale(1)}
+
+  /* --- Lifeline --- */
+  .r-line{
+    position:relative;width:3px;height:clamp(96px,13vw,140px);
+    display:flex;justify-content:center;
+  }
+  .r-wire{
+    position:absolute;inset:0;width:3px;border-radius:3px;
+    background:linear-gradient(to bottom,rgba(34,164,71,.25),rgba(34,164,71,.55));
+    transition:background .5s ease,opacity .5s ease;
+  }
+  .res-stage[data-state="offline"] .r-wire{
+    background:
+      repeating-linear-gradient(to bottom,var(--warn) 0 6px,transparent 6px 13px);
+    opacity:.7;
+    /* the broken gap in the middle */
+    -webkit-mask-image:linear-gradient(to bottom,#000 0 42%,transparent 42% 58%,#000 58% 100%);
+    mask-image:linear-gradient(to bottom,#000 0 42%,transparent 42% 58%,#000 58% 100%);
+  }
+  /* packets flowing up the wire (online / restored) */
+  .r-flow{position:absolute;inset:0;overflow:visible}
+  .r-flow i{
+    position:absolute;left:50%;bottom:0;width:8px;height:8px;margin-left:-4px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft),0 0 14px 1px rgba(34,164,71,.5);
+    opacity:0;
+  }
+  .res-stage[data-state="online"] .r-flow i,
+  .res-stage[data-state="restored"] .r-flow i{
+    animation:rUp 1.5s cubic-bezier(.5,0,.5,1) infinite;
+  }
+  .res-stage[data-state="restored"] .r-flow i{animation-duration:.72s}  /* fast flush */
+  .r-flow i:nth-child(2){animation-delay:.38s}
+  .r-flow i:nth-child(3){animation-delay:.76s}
+  .r-flow i:nth-child(4){animation-delay:1.14s}
+  .res-stage[data-state="offline"] .r-flow i{animation:none;opacity:0}
+
+  /* cut badge appears when offline */
+  .r-cut{
+    position:absolute;top:50%;inset-inline-start:50%;transform:translate(50%,-50%) scale(.85);
+    display:inline-flex;align-items:center;gap:6px;
+    height:28px;padding:0 12px;border-radius:999px;white-space:nowrap;
+    background:var(--warn);color:#fff;font-size:12px;font-weight:700;
+    box-shadow:0 10px 22px -10px rgba(224,135,42,.9);
+    opacity:0;pointer-events:none;
+    transition:opacity .35s ease,transform .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .r-cut svg{width:13px;height:13px}
+  .res-stage[data-state="offline"] .r-cut{opacity:1;transform:translate(50%,-50%) scale(1)}
+
+  /* --- Device --- */
+  .r-device{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .r-screen{
+    position:relative;width:clamp(200px,26vw,264px);
+    padding:16px;border-radius:16px;
+    background:#fff;border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(15,15,15,.04),0 20px 44px -26px rgba(15,15,15,.3);
+    transition:border-color .5s ease,box-shadow .5s ease;
+  }
+  .res-stage[data-state="offline"] .r-screen{border-color:rgba(224,135,42,.4);box-shadow:0 0 0 3px var(--warn-soft),0 20px 44px -26px rgba(15,15,15,.3)}
+  .r-rows{display:flex;flex-direction:column;gap:9px}
+  .r-row{height:10px;border-radius:5px;background:#ececea}
+  .r-row:nth-child(1){width:86%}
+  .r-row:nth-child(2){width:64%}
+  .r-row:nth-child(3){width:74%}
+  .r-row:nth-child(4){width:52%}
+  /* "saved locally" toast inside the screen */
+  .r-save{
+    position:absolute;top:10px;inset-inline-end:10px;
+    display:inline-flex;align-items:center;gap:5px;
+    height:24px;padding:0 9px;border-radius:999px;
+    background:#fff;border:1px solid var(--line);
+    font-size:11px;font-weight:700;color:var(--ink-2);
+    box-shadow:0 6px 16px -8px rgba(15,15,15,.3);
+    opacity:0;transform:translateY(-4px) scale(.9);
+    transition:opacity .3s ease,transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .r-save svg{width:12px;height:12px;color:var(--warn)}
+  .res-stage.saved .r-save{opacity:1;transform:none}
+
+  .r-device-label{font-size:12.5px;font-weight:600;color:var(--muted)}
+
+  /* --- Local vault (queued records while offline) --- */
+  .r-vault{
+    display:flex;align-items:center;gap:8px;
+    height:36px;padding:0 13px;border-radius:999px;
+    background:#fff;border:1px dashed rgba(224,135,42,.45);
+    color:var(--ink-2);font-size:12.5px;font-weight:600;
+    opacity:0;transform:translateY(6px) scale(.96);
+    transition:opacity .4s ease,transform .4s cubic-bezier(.34,1.56,.64,1),border-color .4s ease,background-color .4s ease;
+  }
+  .r-vault .v-ico{width:16px;height:16px;color:var(--warn);flex:none}
+  .r-vault .v-label{color:var(--muted);font-weight:500}
+  .r-vault .v-count{font-variant-numeric:tabular-nums}
+  .r-vault .v-stack{display:inline-flex;gap:3px;margin-inline-start:2px}
+  .r-vault .v-stack b{width:6px;height:14px;border-radius:2px;background:var(--warn);display:block;
+    transform:scaleY(0);transform-origin:bottom;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+  .r-vault .v-stack b.on{transform:scaleY(1)}
+  .res-stage[data-state="offline"] .r-vault{opacity:1;transform:none}
+  .res-stage[data-state="restored"] .r-vault{
+    opacity:1;transform:none;border-style:solid;border-color:rgba(34,164,71,.45);
+  }
+  .res-stage[data-state="restored"] .r-vault .v-ico{color:var(--accent)}
+  .res-stage[data-state="restored"] .r-vault .v-stack b{background:var(--accent)}
+  .res-stage[data-state="online"] .r-vault{opacity:0;transform:translateY(6px) scale(.96)}
+
+  /* --- step legend --- */
+  .res-steps{
+    margin-top:clamp(36px,4.4vw,56px);
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:clamp(12px,1.6vw,20px);
+  }
+  .res-step{
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;
+    padding:18px 14px;border-radius:16px;
+    border:1px solid var(--line);background:#fff;
+    transition:border-color .4s ease,box-shadow .4s ease,transform .4s cubic-bezier(.2,.7,.2,1),background-color .4s ease;
+  }
+  .res-step .rs-ic{
+    width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+    background:#f1f1ef;color:var(--ink);transition:background-color .4s ease,color .4s ease;
+  }
+  .res-step .rs-ic svg{width:20px;height:20px}
+  .res-step b{font-size:14.5px;font-weight:700}
+  .res-step small{font-size:12.5px;color:var(--muted);line-height:1.6}
+  /* active step mirrors the current state */
+  .res-stage[data-state="online"]   .res-step[data-step="online"],
+  .res-stage[data-state="restored"] .res-step[data-step="restored"]{
+    border-color:rgba(34,164,71,.45);background:#f6fcf8;transform:translateY(-3px);
+    box-shadow:0 0 0 3px var(--accent-soft),0 14px 30px -20px rgba(15,15,15,.25);
+  }
+  .res-stage[data-state="online"]   .res-step[data-step="online"] .rs-ic,
+  .res-stage[data-state="restored"] .res-step[data-step="restored"] .rs-ic{background:var(--accent);color:#fff}
+  .res-stage[data-state="offline"]  .res-step[data-step="offline"]{
+    border-color:rgba(224,135,42,.45);background:#fef8f1;transform:translateY(-3px);
+    box-shadow:0 0 0 3px var(--warn-soft),0 14px 30px -20px rgba(15,15,15,.25);
+  }
+  .res-stage[data-state="offline"]  .res-step[data-step="offline"] .rs-ic{background:var(--warn);color:#fff}
+
+  @keyframes rUp{
+    0%{bottom:0;opacity:0}
+    12%{opacity:1}
+    82%{opacity:1}
+    100%{bottom:100%;opacity:0}
+  }
+  @keyframes rPing{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+
+  @media (max-width:640px){
+    .res-steps{grid-template-columns:1fr}
+    .res-step{flex-direction:row;text-align:start;align-items:center;gap:12px}
+    .res-step .rs-ic{flex:none}
+    .res-status{position:static;transform:none;margin:0 auto 6px;display:inline-flex}
+    .res-scene{margin-top:8px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .r-flow i{display:none}
+    .res-status .rs-dot::after{animation:none}
+  }
+
+  /* =========================================================
      Pricing
      ========================================================= */
   .pricing{position:relative}
@@ -565,91 +812,72 @@
   .pricing-head .eyebrow{justify-content:center}
   .pricing-head .lead{margin-inline:auto}
 
-  /* billing toggle */
-  .toggle{
-    margin-top:clamp(28px,3.4vw,40px);
-    display:inline-flex;gap:4px;padding:5px;border-radius:999px;
-    background:#f7f7f5;border:1px solid var(--line);
-    position:relative;align-self:center;
-  }
-  .toggle button{
-    all:unset;cursor:pointer;position:relative;z-index:1;
-    display:inline-flex;align-items:center;gap:7px;
-    height:38px;padding:0 18px;border-radius:999px;
-    font:600 14px/1 "Vazirmatn",sans-serif;color:var(--muted);
-    transition:color .35s ease;
-    white-space:nowrap;
-  }
-  .toggle button .save{
-    font-size:11px;font-weight:700;color:#12894a;
-    background:#d3f5d8;border-radius:999px;padding:3px 7px;line-height:1;
-  }
-  .toggle button[aria-selected="true"]{color:var(--ink)}
-  .toggle button[aria-selected="true"] .save{background:#bdedc6}
-  .toggle .thumb{
-    position:absolute;z-index:0;top:5px;bottom:5px;width:0;
-    border-radius:999px;background:#fff;opacity:0;
-    box-shadow:0 1px 2px rgba(15,15,15,.08),0 0 0 1px var(--line);
-    transition:transform .45s cubic-bezier(.65,0,.25,1),width .45s cubic-bezier(.65,0,.25,1),opacity .3s ease;
-  }
-  .toggle .thumb.ready{opacity:1}
-  .toggle button:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:999px}
-
-  /* plan grid */
+  /* plan grid — featured (middle) card sits slightly taller & centered */
   .plans{
-    margin-top:clamp(40px,5vw,64px);
+    margin-top:clamp(48px,5.2vw,72px);
     display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:clamp(16px,1.8vw,24px);align-items:stretch;
+    gap:clamp(18px,1.8vw,26px);align-items:center;
   }
   .plan{
     position:relative;display:flex;flex-direction:column;
-    padding:clamp(26px,2.4vw,34px);
-    border-radius:20px;
+    padding:clamp(28px,2.6vw,38px);
+    border-radius:24px;
     background:#fff;border:1px solid var(--line);
-    box-shadow:0 1px 2px rgba(15,15,15,.03),0 10px 30px -22px rgba(15,15,15,.18);
-    transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease;
+    box-shadow:0 1px 2px rgba(15,15,15,.03),0 12px 34px -24px rgba(15,15,15,.2);
+    transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s ease,border-color .45s ease;
+    /* staggered entrance when the grid reveals */
+    opacity:0;transform:translateY(22px);
   }
+  .plans.in .plan{
+    animation:planIn .8s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:var(--d,0ms);
+  }
+  @keyframes planIn{to{opacity:1;transform:none}}
+
   .plan:hover{
-    transform:translateY(-6px);
+    transform:translateY(-8px);
     border-color:rgba(15,15,15,.14);
-    box-shadow:0 1px 2px rgba(15,15,15,.04),0 28px 60px -30px rgba(15,15,15,.28);
+    box-shadow:0 1px 2px rgba(15,15,15,.04),0 30px 64px -30px rgba(15,15,15,.3);
   }
-  /* spotlighted by the billing toggle */
-  .plan.spot:not(.feat){
-    border-color:rgba(34,164,71,.5);
-    box-shadow:0 0 0 3px rgba(34,164,71,.14),0 1px 2px rgba(15,15,15,.04),0 24px 56px -28px rgba(15,15,15,.26);
-  }
-  .plan.feat.spot{box-shadow:0 0 0 4px rgba(34,164,71,.28),0 1px 2px rgba(15,15,15,.1),0 34px 80px -30px rgba(15,15,15,.55)}
-  /* featured plan (recommended) */
+
+  /* featured plan (recommended) — the yearly plan */
   .plan.feat{
+    z-index:2;
+    padding-block:clamp(36px,3.4vw,48px);
     background:
-      radial-gradient(130% 100% at 100% 0%,rgba(34,164,71,.08),transparent 60%),
-      #0f0f0f;
+      radial-gradient(140% 110% at 100% 0%,rgba(34,164,71,.14),transparent 58%),
+      linear-gradient(180deg,#161615,#0d0d0c);
     border-color:#0f0f0f;color:#fff;
-    box-shadow:0 1px 2px rgba(15,15,15,.1),0 30px 70px -28px rgba(15,15,15,.5);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.04) inset,
+      0 1px 2px rgba(15,15,15,.1),
+      0 40px 90px -34px rgba(15,15,15,.6);
   }
-  .plan.feat:hover{transform:translateY(-10px);box-shadow:0 1px 2px rgba(15,15,15,.1),0 40px 90px -32px rgba(15,15,15,.6)}
+  .plan.feat:hover{transform:translateY(-12px);box-shadow:0 1px 2px rgba(15,15,15,.1),0 50px 110px -36px rgba(15,15,15,.7)}
   .plan.feat .p-name{color:#fff}
-  .plan.feat .p-desc,.plan.feat .p-users,.plan.feat .p-period,.plan.feat .p-note{color:rgba(255,255,255,.66)}
+  .plan.feat .p-desc,.plan.feat .p-period{color:rgba(255,255,255,.62)}
   .plan.feat .p-amount{color:#fff}
-  .plan.feat .p-feat li{color:rgba(255,255,255,.9)}
+  .plan.feat .p-feat li{color:rgba(255,255,255,.92)}
   .plan.feat .p-feat svg{color:#5ad67f}
   .plan.feat .p-users{background:rgba(255,255,255,.1);color:#fff}
-  .plan.feat .p-old{color:rgba(255,255,255,.4)}
+  .plan.feat .p-old s{color:rgba(255,255,255,.42)}
+  .plan.feat .p-save{background:rgba(90,214,127,.16);color:#9ff0b6}
 
   .p-badge{
-    position:absolute;top:-13px;inset-inline-start:50%;transform:translateX(50%);
-    display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 13px;border-radius:999px;
-    background:#22a447;color:#fff;font:700 12px/1 "Vazirmatn",sans-serif;white-space:nowrap;
-    box-shadow:0 6px 16px -6px rgba(34,164,71,.7);
+    position:absolute;top:-14px;inset-inline-start:50%;transform:translateX(50%);
+    display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 14px;border-radius:999px;
+    background:linear-gradient(180deg,#2bb954,#1d9440);color:#fff;
+    font:700 12px/1 "Vazirmatn",sans-serif;white-space:nowrap;
+    box-shadow:0 8px 20px -8px rgba(34,164,71,.85);
   }
   .p-badge svg{width:12px;height:12px}
 
-  .p-name{font-size:18px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
-  .p-desc{margin-top:6px;font-size:13.5px;line-height:1.7;color:var(--muted)}
+  .p-top{min-height:66px}
+  .p-name{font-size:19px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+  .p-desc{margin-top:7px;font-size:13.5px;line-height:1.7;color:var(--muted)}
 
   .p-users{
-    margin-top:18px;align-self:flex-start;
+    margin-top:20px;align-self:flex-start;
     display:inline-flex;align-items:center;gap:7px;
     height:30px;padding:0 12px;border-radius:999px;
     background:#f1f1ef;color:var(--ink-2);
@@ -659,43 +887,48 @@
 
   .p-price{margin-top:22px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
   .p-amount{
-    font-size:clamp(34px,3.6vw,44px);font-weight:900;letter-spacing:-.03em;
+    font-size:clamp(36px,3.8vw,48px);font-weight:900;letter-spacing:-.03em;
     color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;
-    transition:opacity .3s ease,transform .3s ease;
   }
-  .p-amount .cur{font-size:.44em;font-weight:700;margin-inline-start:4px}
+  .p-amount .cur{font-size:.42em;font-weight:700;margin-inline-start:5px;color:var(--muted)}
+  .plan.feat .p-amount .cur{color:rgba(255,255,255,.6)}
   .p-period{font-size:13.5px;color:var(--muted);font-weight:500}
   .p-old{
-    margin-top:8px;font-size:13px;color:#9a9893;font-weight:500;min-height:18px;
+    margin-top:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+    font-size:13px;color:#9a9893;font-weight:500;min-height:20px;
   }
   .p-old s{text-decoration-thickness:1.5px}
+  .p-save{
+    display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;
+    background:#e6f7eb;color:#12894a;font-size:11.5px;font-weight:700;line-height:1;
+  }
 
   .p-cta{
-    margin-top:22px;display:inline-flex;align-items:center;justify-content:center;
-    height:46px;border-radius:12px;
+    margin-top:26px;display:inline-flex;align-items:center;justify-content:center;
+    height:48px;border-radius:14px;
     font:700 15px/1 "Vazirmatn",sans-serif;text-decoration:none;
     transition:background-color .25s ease,transform .2s ease,box-shadow .25s ease;
   }
   .plan .p-cta{background:#f1f1ef;color:var(--ink)}
   .plan .p-cta:hover{background:#e7e7e4}
   .plan .p-cta:active{transform:scale(.985)}
-  .plan.feat .p-cta{background:#22a447;color:#fff;box-shadow:0 10px 24px -10px rgba(34,164,71,.8)}
-  .plan.feat .p-cta:hover{background:#1d9440}
+  .plan.feat .p-cta{background:#22a447;color:#fff;box-shadow:0 12px 26px -10px rgba(34,164,71,.85)}
+  .plan.feat .p-cta:hover{background:#1d9440;transform:translateY(-1px)}
 
-  .p-feat{list-style:none;margin-top:26px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:13px}
+  .p-feat{list-style:none;margin-top:28px;padding-top:26px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px}
   .plan.feat .p-feat{border-top-color:rgba(255,255,255,.14)}
   .p-feat li{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;color:var(--ink-2)}
   .p-feat svg{flex:none;width:18px;height:18px;margin-top:1px;color:#22a447}
 
   .pricing-foot{
-    margin-top:clamp(28px,3.4vw,40px);text-align:center;
+    margin-top:clamp(32px,3.6vw,44px);text-align:center;
     font-size:13.5px;color:var(--muted);
   }
   .pricing-foot svg{width:14px;height:14px;vertical-align:-2px;margin-inline-end:5px;opacity:.7}
 
   @media (max-width:900px){
-    .plans{grid-template-columns:1fr;max-width:460px;margin-inline:auto}
-    .plan.feat{order:-1}
+    .plans{grid-template-columns:1fr;max-width:440px;margin-inline:auto;align-items:stretch}
+    .plan.feat{order:-1;padding-block:clamp(30px,3.4vw,40px)}
   }
 
   @media (max-width:640px){
@@ -703,8 +936,6 @@
     .frame{border-radius:12px}
     .bar{height:32px}
     .bar .addr{display:none}
-    .toggle{flex-wrap:wrap;justify-content:center}
-    .toggle button{height:34px;padding:0 13px;font-size:13px}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}
@@ -718,6 +949,7 @@
     <div class="nav-in">
       <a class="brand" href="#"><b></b>وت پلاس</a>
       <ul class="links">
+        <li><a href="#resilience">آنلاین و آفلاین</a></li>
         <li><a href="#pricing">تعرفه</a></li>
         <li><a href="#contact">ارتباط با ما</a></li>
       </ul>
@@ -803,9 +1035,8 @@
             <path class="ln" d="M45 53 L33 51 M45 57 L34 59 M75 53 L87 51 M75 57 L86 59" stroke-width="1.5"/>
           </g>
           </g>
-          <!-- hover / click targets -->
+          <!-- click target (body) -->
           <rect class="hit hit-body" id="catHit" x="29" y="16" width="62" height="102"/>
-          <use href="#ctailBase" class="hit-tail" id="ctailHit"/>
         </svg>
       </div>
 
@@ -923,6 +1154,97 @@
     </div>
   </section>
 
+  <!-- ================= Offline-first resilience ================= -->
+  <section class="sec resilience" id="resilience" aria-labelledby="res-title" data-screen-label="Offline first">
+    <div class="wrap">
+      <header class="res-head reveal">
+        <span class="eyebrow">آنلاین و آفلاین</span>
+        <h2 class="h2" id="res-title">اینترنت قطع شود، کارِ شما قطع نمی‌شود</h2>
+        <p class="lead">وت پلاس هم آنلاین کار می‌کند و هم آفلاین. وقتی اینترنت وصل است، همه‌چیز لحظه‌ای روی فضای ابری همگام می‌شود؛ و اگر قطع شد، داده‌ها روی دستگاه شما ذخیره می‌مانند و به‌محض برگشتِ اتصال، خودکار به ابر منتقل می‌شوند — بدون از‌دست‌رفتن حتی یک رکورد.</p>
+      </header>
+
+      <div class="res-stage reveal" id="resStage" data-state="online" aria-hidden="true">
+        <!-- state caption (announced visually) -->
+        <div class="res-status" id="resStatus">
+          <span class="rs-dot"></span>
+          <span class="rs-text">در حال همگام‌سازی با فضای ابری…</span>
+        </div>
+
+        <div class="res-scene">
+          <!-- Cloud -->
+          <div class="r-cloud" id="rCloud">
+            <svg viewBox="0 0 120 72" fill="none" aria-hidden="true">
+              <path class="cl-body" d="M34 60 A20 20 0 0 1 36 20 A24 24 0 0 1 82 24 A17 17 0 0 1 86 60 Z"/>
+            </svg>
+            <span class="r-cloud-label">فضای ابری وت پلاس</span>
+            <span class="r-cloud-sync" id="rCloudSync">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+          </div>
+
+          <!-- Lifeline (the connection) -->
+          <div class="r-line" id="rLine">
+            <span class="r-wire"></span>
+            <span class="r-flow" id="rFlow">
+              <i></i><i></i><i></i><i></i>
+            </span>
+            <span class="r-cut" id="rCut">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              قطع اینترنت
+            </span>
+          </div>
+
+          <!-- Device / clinic -->
+          <div class="r-device">
+            <div class="r-screen">
+              <div class="r-rows">
+                <span class="r-row"></span><span class="r-row"></span>
+                <span class="r-row"></span><span class="r-row"></span>
+              </div>
+              <div class="r-save" id="rSave">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+                ذخیره شد
+              </div>
+            </div>
+            <!-- local vault: queued records while offline -->
+            <div class="r-vault" id="rVault">
+              <svg class="v-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
+              <span class="v-label">حافظهٔ محلی</span>
+              <span class="v-count" id="rVaultCount">۰ رکورد در صف</span>
+              <span class="v-stack" id="rVaultStack"></span>
+            </div>
+            <span class="r-device-label">دستگاه کلینیک شما</span>
+          </div>
+        </div>
+
+        <!-- step legend -->
+        <div class="res-steps" role="list">
+          <div class="res-step" role="listitem" data-step="online">
+            <span class="rs-ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14 0M8.5 16.1a6 6 0 0 1 7 0M2 8.82a15 15 0 0 1 20 0"/><circle cx="12" cy="20" r="1"/></svg>
+            </span>
+            <b>آنلاین</b>
+            <small>همگام‌سازی لحظه‌ای با ابر</small>
+          </div>
+          <div class="res-step" role="listitem" data-step="offline">
+            <span class="rs-ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m2 2 20 20M8.5 16.1a6 6 0 0 1 7 0M5 12.55a11 11 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22 8.82M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><circle cx="12" cy="20" r="1"/></svg>
+            </span>
+            <b>آفلاین</b>
+            <small>ذخیرهٔ امن روی دستگاه</small>
+          </div>
+          <div class="res-step" role="listitem" data-step="restored">
+            <span class="rs-ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+            </span>
+            <b>بازگشت اتصال</b>
+            <small>انتقال خودکار صف به ابر</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= Pricing ================= -->
   <section class="sec pricing" id="pricing" aria-labelledby="pricing-title" data-screen-label="Pricing">
     <div class="wrap">
@@ -930,20 +1252,15 @@
         <span class="eyebrow">تعرفه‌ها</span>
         <h2 class="h2" id="pricing-title">پلنی که اندازه کلینیک شماست</h2>
         <p class="lead">همهٔ امکانات وت پلاس در تمام پلن‌ها فعال است؛ فقط مدت اشتراک و تعداد کاربران فرق می‌کند. هرچه بلندمدت‌تر، مقرون‌به‌صرفه‌تر.</p>
-
-        <div class="toggle reveal" id="billToggle" role="tablist" aria-label="دورهٔ پرداخت">
-          <span class="thumb" id="billThumb"></span>
-          <button role="tab" type="button" data-bill="monthly" aria-selected="false">ماهانه</button>
-          <button role="tab" type="button" data-bill="half"    aria-selected="true">شش‌ماهه<span class="save">٪۱۸ تخفیف</span></button>
-          <button role="tab" type="button" data-bill="yearly"  aria-selected="false">سالانه<span class="save">٪۳۳ تخفیف</span></button>
-        </div>
       </header>
 
       <div class="plans reveal">
         <!-- Monthly -->
-        <article class="plan" data-plan="monthly">
-          <h3 class="p-name">ماهانه</h3>
-          <p class="p-desc">مناسب شروع کار و آشنایی کامل با امکانات وت پلاس.</p>
+        <article class="plan" data-plan="monthly" style="--d:0ms">
+          <div class="p-top">
+            <h3 class="p-name">ماهانه</h3>
+            <p class="p-desc">مناسب شروع کار و آشنایی کامل با امکانات وت پلاس.</p>
+          </div>
           <span class="p-users">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
             تا ۲ کاربر هم‌زمان
@@ -961,36 +1278,16 @@
           </ul>
         </article>
 
-        <!-- 6-month (featured) -->
-        <article class="plan feat" data-plan="half">
+        <!-- Yearly (featured / recommended) -->
+        <article class="plan feat" data-plan="yearly" style="--d:90ms">
           <span class="p-badge">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             پیشنهاد ویژه
           </span>
-          <h3 class="p-name">شش‌ماهه</h3>
-          <p class="p-desc">محبوب‌ترین انتخاب کلینیک‌ها؛ تعادل عالی قیمت و مدت.</p>
-          <span class="p-users">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
-            تا ۴ کاربر هم‌زمان
-          </span>
-          <div class="p-price">
-            <span class="p-amount">۷٫۴<span class="cur">میلیون تومان</span></span>
-            <span class="p-period">/ شش‌ماهه</span>
+          <div class="p-top">
+            <h3 class="p-name">سالانه</h3>
+            <p class="p-desc">صرفه‌جویی حداکثری و بالاترین ظرفیت؛ انتخاب حرفه‌ای کلینیک‌ها.</p>
           </div>
-          <p class="p-old">به‌جای <s>۹ میلیون</s> — ۱٫۶ میلیون صرفه‌جویی</p>
-          <a class="p-cta" href="#demo">خرید اشتراک شش‌ماهه</a>
-          <ul class="p-feat">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تمام امکانات پلن ماهانه</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>۲ کاربر بیشتر</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبانی اولویت‌دار</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>آموزش اختصاصی تیم</li>
-          </ul>
-        </article>
-
-        <!-- Yearly -->
-        <article class="plan" data-plan="yearly">
-          <h3 class="p-name">سالانه</h3>
-          <p class="p-desc">بیشترین صرفه‌جویی و بالاترین ظرفیت برای تیم‌های بزرگ‌تر.</p>
           <span class="p-users">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
             تا ۵ کاربر هم‌زمان
@@ -999,13 +1296,37 @@
             <span class="p-amount">۱۲<span class="cur">میلیون تومان</span></span>
             <span class="p-period">/ سالانه</span>
           </div>
-          <p class="p-old">به‌جای <s>۱۸ میلیون</s> — ۶ میلیون صرفه‌جویی</p>
+          <p class="p-old">به‌جای <s>۱۸ میلیون</s><span class="p-save">۶ میلیون صرفه‌جویی</span></p>
           <a class="p-cta" href="#demo">خرید اشتراک سالانه</a>
           <ul class="p-feat">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تمام امکانات پلن شش‌ماهه</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>۵ کاربر هم‌زمان</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبانی اختصاصی VIP</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبان‌گیری خودکار ابری</li>
+          </ul>
+        </article>
+
+        <!-- 6-month -->
+        <article class="plan" data-plan="half" style="--d:180ms">
+          <div class="p-top">
+            <h3 class="p-name">شش‌ماهه</h3>
+            <p class="p-desc">تعادل عالی قیمت و مدت؛ مناسب کلینیک‌های رو‌به‌رشد.</p>
+          </div>
+          <span class="p-users">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            تا ۴ کاربر هم‌زمان
+          </span>
+          <div class="p-price">
+            <span class="p-amount">۷٫۴<span class="cur">میلیون تومان</span></span>
+            <span class="p-period">/ شش‌ماهه</span>
+          </div>
+          <p class="p-old">به‌جای <s>۹ میلیون</s><span class="p-save">۱٫۶ میلیون صرفه‌جویی</span></p>
+          <a class="p-cta" href="#demo">خرید اشتراک شش‌ماهه</a>
+          <ul class="p-feat">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تمام امکانات پلن ماهانه</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>۲ کاربر بیشتر</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبانی اولویت‌دار</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>آموزش اختصاصی تیم</li>
           </ul>
         </article>
       </div>
@@ -1118,16 +1439,18 @@
 })();
 (function(){
   /* ----------------------------------------------------------------
-     Cat tail "magnet" — the tail tip is gently drawn toward the
-     pointer once the pointer has actually touched the tail, then
-     springs back with soft damping. It never snaps rigidly onto the
-     cursor: the pull is capped and eased so it reads like petting.
+     Cat tail "magnet" — a true proximity magnet. The tail tip is
+     continuously drawn toward the pointer whenever it is within a
+     field radius around the tail (measured in SVG units), with the
+     pull strength falling off smoothly with distance. There is no
+     need to hover exactly over the thin tail stroke — the tail
+     reaches out to meet the cursor like a magnet, then springs back
+     with soft damping once the pointer moves out of range.
      ---------------------------------------------------------------- */
   const cat  = document.querySelector('.pet-cat');
   const svg  = cat && cat.querySelector('svg');
   const base = document.getElementById('ctailBase');      // visible tail paths (via <use>)
-  const hit  = document.getElementById('ctailHit');
-  if(!cat || !svg || !base || !hit) return;
+  if(!cat || !svg || !base) return;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   // Pause / resume the idle SMIL sway so it doesn't fight the magnet.
@@ -1153,8 +1476,12 @@
   let pull = 0, pullTarget = 0;
   // Direction the pointer is relative to the tail tip (SVG units).
   let dirX = 0, dirY = 0, dirXT = 0, dirYT = 0;
-  let engaged = false;           // pointer has touched the tail at least this session
   let raf = 0, idle = true;
+
+  // Magnet field, in SVG user units. The pull reaches full strength when the
+  // pointer is at/inside FIELD_IN of the tail tip and fades to zero at FIELD_OUT.
+  const FIELD_IN  = 14;     // within this radius -> full pull
+  const FIELD_OUT = 150;    // beyond this radius -> no pull (magnet disengages)
 
   // Convert a client point into the svg's viewBox coordinate space.
   function toSvg(cx, cy){
@@ -1212,31 +1539,51 @@
   }
   function kick(){ if(!raf) raf = requestAnimationFrame(loop); }
 
-  // engage the magnet when the pointer touches the tail's hit stroke
-  hit.addEventListener('pointerenter', ()=>{ engaged = true; });
-  hit.addEventListener('pointerleave', ()=>{
-    engaged = false;
-    pullTarget = 0;            // release — tail eases home
-    kick();
-  });
+  // Distance from a point to the resting tail, sampled along the rest curve so
+  // the magnet engages near ANY part of the tail — not only the tip.
+  const SAMPLES = (function(){
+    const pts = [];
+    const B = (a,b,c,d,t)=>{ const u=1-t; return u*u*u*a + 3*u*u*t*b + 3*u*t*t*c + t*t*t*d; };
+    // first cubic: ROOT -> c1,c2 -> mid ; second cubic: mid -> c3,c4 -> tip
+    for(let t=0;t<=1;t+=0.1){
+      pts.push({ x:B(ROOT.x,REST.c1.x,REST.c2.x,REST.mid.x,t), y:B(ROOT.y,REST.c1.y,REST.c2.y,REST.mid.y,t) });
+    }
+    for(let t=0;t<=1;t+=0.1){
+      pts.push({ x:B(REST.mid.x,REST.c3.x,REST.c4.x,REST.tip.x,t), y:B(REST.mid.y,REST.c3.y,REST.c4.y,REST.tip.y,t) });
+    }
+    return pts;
+  })();
+  function nearestOnTail(p){
+    let best = Infinity;
+    for(const s of SAMPLES){ const d = Math.hypot(p.x-s.x, p.y-s.y); if(d < best) best = d; }
+    return best;
+  }
 
-  // follow the pointer; strength grows as it nears the tail tip
-  addEventListener('pointermove', (e)=>{
-    if(!engaged) return;
-    const p = toSvg(e.clientX, e.clientY);
+  // Continuous magnet: update pull/direction from the pointer's proximity to the
+  // tail. The tail tip is always aimed at the pointer; strength eases in with
+  // proximity and out as the pointer leaves the field — no hover gate.
+  function updateFromPointer(cx, cy){
+    const p = toSvg(cx, cy);
+    // direction: tip always reaches toward the pointer
     const dx = p.x - REST.tip.x;
     const dy = p.y - REST.tip.y;
     const dist = Math.hypot(dx, dy) || 1;
     dirXT = dx / dist;
     dirYT = dy / dist;
-    // closer pointer -> stronger pull, but capped at 1 and never rigid
-    pullTarget = Math.max(0, Math.min(1, 1 - (dist - 10) / 70));
+    // strength: based on nearest distance to the whole tail, smooth falloff
+    const near = nearestOnTail(p);
+    const t = (FIELD_OUT - near) / (FIELD_OUT - FIELD_IN);
+    const s = Math.max(0, Math.min(1, t));
+    pullTarget = s * s * (3 - 2 * s);   // smoothstep for an organic magnet feel
     kick();
-  }, {passive:true});
+  }
 
-  // if the pointer lifts entirely, release
-  addEventListener('pointerup',    ()=>{ pullTarget = 0; kick(); }, {passive:true});
-  document.addEventListener('pointerleave', ()=>{ engaged = false; pullTarget = 0; kick(); });
+  addEventListener('pointermove', (e)=>updateFromPointer(e.clientX, e.clientY), {passive:true});
+
+  // release cleanly when the pointer leaves the window / lifts
+  addEventListener('pointerup', ()=>{ pullTarget = 0; kick(); }, {passive:true});
+  document.addEventListener('pointerleave', ()=>{ pullTarget = 0; kick(); });
+  window.addEventListener('blur', ()=>{ pullTarget = 0; kick(); });
 })();
 (function(){
   const cat = document.querySelector('.pet-cat');
@@ -1284,47 +1631,93 @@
   });
 })();
 (function(){
-  /* Pricing billing toggle: moves the sliding thumb and spotlights the
-     matching plan card so the three durations feel like one control. */
-  const toggle = document.getElementById('billToggle');
-  const thumb  = document.getElementById('billThumb');
-  if(!toggle || !thumb) return;
-  const btns  = [...toggle.querySelectorAll('button')];
-  const plans = [...document.querySelectorAll('.plan')];
+  /* Offline-first resilience: an automatic state machine that narrates the
+     online -> offline -> reconnected cycle. Online, records sync to the cloud;
+     offline, they stack safely in the local vault; on reconnect the queue
+     flushes up and syncs. Runs only while the section is on screen. */
+  const stage = document.getElementById('resStage');
+  if(!stage) return;
+  const statusText = stage.querySelector('.rs-text');
+  const vaultCount = document.getElementById('rVaultCount');
+  const vaultStack = document.getElementById('rVaultStack');
+  const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 
-  function moveThumb(btn){
-    thumb.style.width = btn.offsetWidth + 'px';
-    // RTL-aware: offsetLeft is measured from the left edge in all directions
-    thumb.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
-    thumb.classList.add('ready');
+  const TEXT = {
+    online:   'در حال همگام‌سازی با فضای ابری…',
+    offline:  'اینترنت قطع شد — داده‌ها روی دستگاه ذخیره می‌شوند',
+    restored: 'اتصال برقرار شد — انتقال خودکار صف به ابر'
+  };
+
+  // build the stack indicator (5 little bars)
+  const BARS = 5;
+  const bars = [];
+  for(let i=0;i<BARS;i++){ const b=document.createElement('b'); vaultStack.appendChild(b); bars.push(b); }
+  function setStack(n){ bars.forEach((b,i)=>b.classList.toggle('on', i < n)); }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let queued = 0, timers = [], visible = false, running = false;
+
+  function setState(s){ stage.dataset.state = s; statusText.textContent = TEXT[s]; }
+  function setQueue(n){ queued = n; vaultCount.textContent = fa(n) + ' رکورد در صف'; setStack(n); }
+  function after(ms, fn){ const t = setTimeout(fn, ms); timers.push(t); return t; }
+  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+
+  // a short "save + sync" pulse on the device/cloud
+  function pulseSave(){
+    stage.classList.add('saved');
+    after(900, ()=>stage.classList.remove('saved'));
+  }
+  function pulseSync(){
+    stage.classList.add('synced');
+    after(1100, ()=>stage.classList.remove('synced'));
   }
 
-  function select(key, focus){
-    btns.forEach(b=>{
-      const on = b.dataset.bill === key;
-      b.setAttribute('aria-selected', on);
-      if(on){ moveThumb(b); if(focus) b.focus(); }
+  function cycle(){
+    if(!visible) { running = false; return; }
+    running = true;
+    clearTimers();
+
+    // 1) ONLINE — syncing happily
+    setState('online'); setQueue(0);
+    pulseSync();
+    after(2600, pulseSync);
+
+    // 2) OFFLINE — connection drops, records pile up locally
+    after(4200, ()=>{
+      setState('offline'); setQueue(0);
+      // records get saved locally one by one
+      after(500,  ()=>{ setQueue(1); pulseSave(); });
+      after(1400, ()=>{ setQueue(2); pulseSave(); });
+      after(2300, ()=>{ setQueue(3); pulseSave(); });
+      after(3200, ()=>{ setQueue(4); pulseSave(); });
     });
-    // spotlight the matching plan (lift + ring) without hard scrolling
-    plans.forEach(p=>p.classList.toggle('spot', p.dataset.plan === key));
+
+    // 3) RESTORED — connection back, queue flushes to cloud, then syncs
+    after(9000, ()=>{
+      setState('restored');
+      pulseSync();
+      // drain the queue quickly as packets rush up
+      after(500,  ()=>setQueue(3));
+      after(1000, ()=>setQueue(2));
+      after(1500, ()=>setQueue(1));
+      after(2000, ()=>{ setQueue(0); pulseSync(); });
+    });
+
+    // loop
+    after(12600, cycle);
   }
 
-  btns.forEach((b,i)=>{
-    b.addEventListener('click', ()=>select(b.dataset.bill));
-    b.addEventListener('keydown', e=>{
-      if(e.key!=='ArrowLeft' && e.key!=='ArrowRight') return;
-      e.preventDefault();
-      // in RTL, ArrowLeft goes to the next (visually left) tab
-      const dir = (e.key==='ArrowLeft') ? 1 : -1;
-      const n = (i + dir + btns.length) % btns.length;
-      select(btns[n].dataset.bill, true);
-    });
-  });
+  if(reduce){
+    // static, legible fallback: show offline-safe state once, no looping
+    setState('offline'); setQueue(4);
+    return;
+  }
 
-  // init: featured (6-month) selected; re-measure thumb after fonts/layout settle
-  function init(){ const cur = btns.find(b=>b.getAttribute('aria-selected')==='true') || btns[0]; select(cur.dataset.bill); }
-  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(init); } else { init(); }
-  addEventListener('resize', ()=>{ const cur = btns.find(b=>b.getAttribute('aria-selected')==='true'); if(cur) moveThumb(cur); });
+  new IntersectionObserver(([e])=>{
+    visible = e.isIntersecting;
+    if(visible){ if(!running) cycle(); }
+    else { clearTimers(); running = false; }
+  },{threshold:.3}).observe(stage);
 })();
 (function(){
   const items = [
