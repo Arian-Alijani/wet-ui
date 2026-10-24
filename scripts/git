@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# scripts/git  —  LOCKED push helper (MANDATORY after every completed task)
+# ------------------------------------------------------------------------------
+# Usage:
+#   scripts/git "<commit message>"
+#
+# What it does (GenSpark AI developer workflow):
+#   1. Stage all changes
+#   2. Commit on the genspark_ai_developer branch (creates/switches if needed)
+#   3. Sync with origin/main (fetch + rebase, prefer remote on conflict help)
+#   4. Push the genspark_ai_developer branch (force-with-lease after rebase)
+#   5. Print the PR compare URL so a pull request can be created/updated
+#
+# This script is intentionally self-contained and idempotent.
+# ==============================================================================
+set -euo pipefail
+
+REPO_DIR="/home/user/webapp"
+BRANCH="genspark_ai_developer"
+BASE="main"
+REMOTE="origin"
+
+cd "$REPO_DIR"
+
+MSG="${1:-chore: progress update}"
+
+# --- Ensure we are on the working branch -------------------------------------
+current_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")"
+if [ "$current_branch" != "$BRANCH" ]; then
+  if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+    git checkout "$BRANCH"
+  else
+    git checkout -b "$BRANCH"
+  fi
+fi
+
+# --- Stage + commit (skip commit if nothing changed) -------------------------
+git add -A
+if git diff --cached --quiet; then
+  echo "[scripts/git] No staged changes to commit."
+else
+  git commit -m "$MSG"
+  echo "[scripts/git] Committed: $MSG"
+fi
+
+# --- Sync with remote base ---------------------------------------------------
+git fetch "$REMOTE" "$BASE" || true
+if git rev-parse --verify --quiet "refs/remotes/$REMOTE/$BASE" >/dev/null; then
+  if ! git rebase "$REMOTE/$BASE"; then
+    echo "[scripts/git] Rebase conflict detected — resolve prioritizing remote, then re-run." >&2
+    exit 1
+  fi
+fi
+
+# --- Push --------------------------------------------------------------------
+git push -u "$REMOTE" "$BRANCH" --force-with-lease
+
+# --- PR URL ------------------------------------------------------------------
+remote_url="$(git remote get-url "$REMOTE")"
+slug="$(echo "$remote_url" | sed -E 's#(git@github.com:|https://github.com/)##; s#\.git$##')"
+echo ""
+echo "[scripts/git] Pushed to $REMOTE/$BRANCH."
+echo "[scripts/git] Open / update PR:"
+echo "    https://github.com/$slug/compare/$BASE...$BRANCH?expand=1"
