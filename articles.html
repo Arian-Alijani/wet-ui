@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقالات و راهنماها | وت پلاس</title>
+<meta name="description" content="مقالات، آموزش‌ها و نکات کاربردی برای مدیریت بهتر کلینیک دامپزشکی با نرم‌افزار وت پلاس؛ نوبت‌دهی، پرونده الکترونیک، انبار دارو و حسابداری.">
+<link rel="canonical" href="https://wetplus.ir/articles.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:title" content="مقالات و راهنماها | وت پلاس">
+<meta property="og:description" content="جدیدترین مقالات و آموزش‌های مدیریت کلینیک دامپزشکی را در وت پلاس بخوانید.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#0f0f0f;
+    --ink-2:#37352f;
+    --muted:#787774;
+    --line:rgba(15,15,15,.09);
+    --frame-bg:#f7f7f5;
+    --surface:#ffffff;
+    --surface-2:#fbfbfa;
+
+    /* ---- Brand / semantic color tokens (shared with index.html) ---- */
+    --accent:#22a447;
+    --accent-ink:#1d9440;
+    --accent-strong:#12894a;
+    --accent-soft:rgba(34,164,71,.14);
+    --accent-weak:rgba(34,164,71,.06);
+    --accent-tint:#e7f7ec;
+    --accent-tint-2:#e6f7eb;
+
+    --sec-space:clamp(64px,8vw,104px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg)}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--accent);outline-offset:3px;border-radius:6px;
+  }
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+  body{
+    font-family:"Vazirmatn",system-ui,sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ---------- Header (identical to index.html) ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.78);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{
+    max-width:1240px;margin:0 auto;
+    height:64px;padding:0 24px;
+    display:flex;align-items:center;gap:32px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:8px;
+    font-weight:800;font-size:18px;letter-spacing:-.01em;
+    color:var(--ink);text-decoration:none;
+  }
+  .brand b{width:9px;height:9px;border-radius:50%;background:var(--accent);display:block}
+  .links{display:flex;gap:4px;list-style:none}
+  .links a{
+    display:block;padding:8px 12px;border-radius:8px;
+    font-size:14.5px;font-weight:500;color:var(--ink-2);text-decoration:none;
+    transition:background-color .2s ease,color .2s ease;
+  }
+  .links a:hover{background:#f1f1ef;color:var(--ink)}
+  .links a.active{background:var(--accent-tint);color:var(--accent-strong);font-weight:600}
+  .actions{margin-inline-start:auto;display:flex;align-items:center;gap:8px}
+  .btn{
+    display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:9px;
+    font:600 14px/1 "Vazirmatn",sans-serif;text-decoration:none;white-space:nowrap;
+    transition:background-color .2s ease,transform .2s ease;
+  }
+  .btn-ghost{color:var(--ink)}
+  .btn-ghost:hover{background:#f1f1ef}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:#2a2a28}
+  .btn-primary:active{transform:scale(.98)}
+  @media (max-width:820px){ .links{display:none} }
+  @media (max-width:720px){
+    .nav-in{height:58px;padding:0 16px}
+    .btn{height:36px;padding:0 12px;font-size:13px}
+  }
+
+  /* ---------- Shared primitives ---------- */
+  .wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.01em;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* =========================================================
+     Articles hero
+     ========================================================= */
+  .art-hero{padding:clamp(40px,5vw,64px) 0 clamp(8px,2vw,16px)}
+  .art-hero-grid{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:clamp(32px,5vw,72px);align-items:center;
+  }
+  .art-hero-media{position:relative}
+  .art-hero-media img{
+    width:100%;aspect-ratio:4/3;object-fit:cover;display:block;
+    border-radius:22px;border:1px solid var(--line);
+    background:var(--frame-bg);
+    box-shadow:0 1px 2px rgba(15,15,15,.03),0 22px 50px -34px rgba(15,15,15,.3);
+  }
+  .art-hero-media::before{
+    content:"";position:absolute;inset:auto auto -18px -18px;z-index:-1;
+    width:62%;height:62%;border-radius:26px;
+    background:radial-gradient(120% 120% at 0% 100%,var(--accent-soft),transparent 70%);
+  }
+  .art-hero-copy h1{
+    font-weight:800;font-size:clamp(30px,4.4vw,52px);line-height:1.22;letter-spacing:-.02em;
+    text-wrap:balance;
+  }
+  .art-hero-copy .lead{
+    margin-top:18px;max-width:520px;
+    font-size:clamp(15px,1.3vw,17.5px);line-height:2;color:var(--muted);text-wrap:pretty;
+  }
+  /* search box */
+  .searchbar{
+    margin-top:28px;position:relative;max-width:520px;
+  }
+  .searchbar input{
+    width:100%;height:56px;padding:0 54px 0 18px;
+    border-radius:16px;border:1px solid var(--line);background:#fff;
+    font:500 15px/1 "Vazirmatn",sans-serif;color:var(--ink);
+    transition:border-color .2s ease,box-shadow .2s ease;
+  }
+  .searchbar input::placeholder{color:#a5a39f}
+  .searchbar input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-weak)}
+  .searchbar svg{
+    position:absolute;inset-inline-end:18px;top:50%;transform:translateY(-50%);
+    width:20px;height:20px;color:var(--muted);pointer-events:none;
+  }
+  @media (max-width:860px){
+    .art-hero-grid{grid-template-columns:1fr;gap:clamp(28px,6vw,40px)}
+    .art-hero-media{order:-1}
+    .art-hero-media img{aspect-ratio:16/10}
+  }
+
+  /* =========================================================
+     Layout: filters + grid + sidebar
+     ========================================================= */
+  .art-body{padding:clamp(28px,4vw,44px) 0 var(--sec-space)}
+  .art-layout{
+    display:grid;grid-template-columns:minmax(0,1fr) 300px;
+    gap:clamp(28px,3vw,40px);align-items:start;
+  }
+
+  /* filter pills row */
+  .filters{
+    display:flex;gap:10px;flex-wrap:wrap;margin-bottom:clamp(24px,3vw,32px);
+  }
+  .pill-filter{
+    appearance:none;cursor:pointer;
+    height:38px;padding:0 16px;border-radius:999px;
+    border:1px solid var(--line);background:#fff;color:var(--ink-2);
+    font:600 13.5px/1 "Vazirmatn",sans-serif;white-space:nowrap;
+    transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .15s ease;
+  }
+  .pill-filter:hover{background:#f1f1ef;border-color:rgba(15,15,15,.14)}
+  .pill-filter[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  .pill-filter:active{transform:scale(.97)}
+
+  /* featured article (wide) */
+  .feat-art{
+    display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+    gap:clamp(20px,2.6vw,36px);align-items:center;
+    padding:clamp(18px,2vw,24px);
+    border:1px solid var(--line);border-radius:24px;background:#fff;
+    box-shadow:0 1px 2px rgba(15,15,15,.03),0 14px 40px -30px rgba(15,15,15,.25);
+    margin-bottom:clamp(26px,3vw,36px);
+    transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease;
+  }
+  .feat-art:hover{transform:translateY(-4px);border-color:rgba(15,15,15,.14);box-shadow:0 1px 2px rgba(15,15,15,.04),0 26px 60px -34px rgba(15,15,15,.32)}
+  .feat-art .thumb{border-radius:18px;overflow:hidden;aspect-ratio:16/11;background:var(--frame-bg)}
+  .feat-art .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+  .feat-art:hover .thumb img{transform:scale(1.04)}
+  .feat-art .fa-body{padding:clamp(6px,1vw,14px) clamp(6px,1.5vw,18px)}
+  .cat-tag{
+    display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:999px;
+    background:var(--accent-tint-2);color:var(--accent-strong);font:700 12px/1 "Vazirmatn",sans-serif;
+  }
+  .feat-art h2{
+    margin-top:16px;font-weight:800;font-size:clamp(20px,2.3vw,27px);line-height:1.45;letter-spacing:-.01em;
+    text-wrap:balance;
+  }
+  .feat-art h2 a{color:var(--ink);text-decoration:none}
+  .feat-art h2 a:hover{color:var(--accent-strong)}
+  .feat-art p{margin-top:14px;font-size:14.5px;line-height:1.95;color:var(--muted);text-wrap:pretty}
+  .meta{
+    margin-top:18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    font-size:12.5px;color:var(--muted);font-weight:500;
+  }
+  .meta span{display:inline-flex;align-items:center;gap:6px}
+  .meta svg{width:15px;height:15px;opacity:.75}
+  .read-more{
+    margin-inline-start:auto;
+    width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+    background:var(--accent);color:#fff;flex:none;
+    transition:background-color .2s ease,transform .2s ease;
+  }
+  .read-more svg{width:18px;height:18px;transform:scaleX(-1)}
+  .feat-art:hover .read-more{background:var(--accent-ink);transform:translateX(-3px)}
+
+  /* grid of cards */
+  .cards{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:clamp(18px,2vw,26px);
+  }
+  .card{
+    display:flex;flex-direction:column;
+    border:1px solid var(--line);border-radius:20px;background:#fff;overflow:hidden;
+    box-shadow:0 1px 2px rgba(15,15,15,.03);
+    transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease;
+    /* staggered entrance */
+    opacity:0;transform:translateY(20px);
+  }
+  .cards.in .card{animation:cardIn .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:var(--d,0ms)}
+  @keyframes cardIn{to{opacity:1;transform:none}}
+  .card:hover{transform:translateY(-6px);border-color:rgba(15,15,15,.14);box-shadow:0 1px 2px rgba(15,15,15,.04),0 24px 54px -32px rgba(15,15,15,.3)}
+  .card .thumb{aspect-ratio:16/10;background:var(--frame-bg);overflow:hidden}
+  .card .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+  .card:hover .thumb img{transform:scale(1.05)}
+  /* gradient placeholder cover (brand-consistent, no fake photo) */
+  .thumb-ph{
+    width:100%;height:100%;display:grid;place-items:center;color:var(--accent-strong);
+    background:
+      radial-gradient(120% 120% at 100% 0%,rgba(34,164,71,.18),transparent 60%),
+      linear-gradient(135deg,#eef9f1,#e4f4e9);
+  }
+  .thumb-ph svg{width:46px;height:46px;opacity:.85}
+  .card-body{display:flex;flex-direction:column;flex:1;padding:clamp(18px,1.8vw,22px)}
+  .card h3{
+    margin-top:14px;font-weight:700;font-size:16.5px;line-height:1.7;letter-spacing:-.01em;
+    text-wrap:balance;
+  }
+  .card h3 a{color:var(--ink);text-decoration:none}
+  .card h3 a:hover{color:var(--accent-strong)}
+  .card .meta{margin-top:auto;padding-top:18px}
+
+  /* sidebar */
+  .side{position:sticky;top:88px;display:flex;flex-direction:column;gap:22px}
+  .side-card{
+    border:1px solid var(--line);border-radius:20px;background:#fff;
+    padding:clamp(20px,2vw,26px);
+    box-shadow:0 1px 2px rgba(15,15,15,.03);
+  }
+  .side-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .side-head h3{font-size:15px;font-weight:800;letter-spacing:-.01em}
+  .side-head svg{width:18px;height:18px;color:var(--muted)}
+  .cat-list{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:4px}
+  .cat-list a{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:11px 14px;border-radius:12px;text-decoration:none;
+    font-size:14px;font-weight:500;color:var(--ink-2);
+    transition:background-color .2s ease,color .2s ease;
+  }
+  .cat-list a:hover{background:#f1f1ef;color:var(--ink)}
+  .cat-list a.active{background:var(--accent-tint);color:var(--accent-strong);font-weight:600}
+  .cat-list .count{
+    font-size:12px;font-weight:600;color:var(--muted);
+    background:#f1f1ef;border-radius:999px;padding:2px 9px;min-width:30px;text-align:center;
+  }
+  .cat-list a.active .count{background:#fff;color:var(--accent-strong)}
+
+  /* sidebar CTA */
+  .side-cta{
+    position:relative;overflow:hidden;
+    border-radius:20px;padding:clamp(22px,2.2vw,28px);color:#fff;
+    background:
+      radial-gradient(130% 120% at 100% 0%,rgba(34,164,71,.2),transparent 56%),
+      linear-gradient(180deg,#161615,#0d0d0c);
+    box-shadow:0 1px 2px rgba(15,15,15,.1),0 24px 54px -34px rgba(15,15,15,.5);
+  }
+  .side-cta h3{font-size:18px;font-weight:800;line-height:1.5;letter-spacing:-.01em}
+  .side-cta p{margin-top:10px;font-size:13.5px;line-height:1.85;color:rgba(255,255,255,.66)}
+  .side-cta a{
+    margin-top:18px;display:inline-flex;align-items:center;gap:8px;justify-content:center;
+    width:100%;height:46px;border-radius:12px;
+    background:var(--accent);color:#fff;text-decoration:none;
+    font:700 14px/1 "Vazirmatn",sans-serif;
+    box-shadow:0 12px 26px -12px rgba(34,164,71,.9);
+    transition:background-color .2s ease,transform .2s ease;
+  }
+  .side-cta a:hover{background:var(--accent-ink);transform:translateY(-2px)}
+  .side-cta a svg{width:18px;height:18px}
+
+  .no-result{
+    display:none;text-align:center;padding:48px 20px;color:var(--muted);
+    border:1px dashed var(--line);border-radius:20px;font-size:15px;
+  }
+
+  @media (max-width:980px){
+    .art-layout{grid-template-columns:1fr}
+    .side{position:static;flex-direction:row;flex-wrap:wrap}
+    .side-card,.side-cta{flex:1;min-width:260px}
+    .feat-art{grid-template-columns:1fr}
+    .feat-art .thumb{aspect-ratio:16/9}
+  }
+  @media (max-width:720px){
+    .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:520px){
+    .cards{grid-template-columns:1fr}
+    .side{flex-direction:column}
+  }
+
+  /* =========================================================
+     Newsletter strip
+     ========================================================= */
+  .newsletter{background:var(--accent-tint);border-block:1px solid var(--accent-soft)}
+  .nl-in{
+    max-width:1240px;margin:0 auto;padding:clamp(32px,4vw,44px) 24px;
+    display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(20px,3vw,40px);align-items:center;
+  }
+  .nl-ico{
+    width:56px;height:56px;border-radius:16px;display:grid;place-items:center;flex:none;
+    background:#fff;color:var(--accent);box-shadow:0 10px 24px -14px rgba(34,164,71,.6);
+  }
+  .nl-ico svg{width:28px;height:28px}
+  .nl-copy h2{font-size:clamp(18px,2vw,22px);font-weight:800;letter-spacing:-.01em}
+  .nl-copy p{margin-top:8px;font-size:14px;line-height:1.8;color:var(--accent-strong);opacity:.92}
+  .nl-form{display:flex;gap:10px}
+  .nl-form input{
+    height:50px;width:clamp(180px,22vw,260px);padding:0 16px;border-radius:13px;
+    border:1px solid var(--accent-soft);background:#fff;
+    font:500 14px/1 "Vazirmatn",sans-serif;color:var(--ink);
+    transition:border-color .2s ease,box-shadow .2s ease;
+  }
+  .nl-form input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-weak)}
+  .nl-form button{
+    height:50px;width:50px;flex:none;border:none;cursor:pointer;border-radius:13px;
+    background:var(--accent);color:#fff;display:grid;place-items:center;
+    transition:background-color .2s ease,transform .2s ease;
+  }
+  .nl-form button:hover{background:var(--accent-ink);transform:translateY(-2px)}
+  .nl-form button svg{width:20px;height:20px;transform:scaleX(-1)}
+  @media (max-width:760px){
+    .nl-in{grid-template-columns:1fr;text-align:center;justify-items:center}
+    .nl-form{width:100%;max-width:420px}
+    .nl-form input{flex:1;width:auto}
+  }
+
+  /* =========================================================
+     Footer (shared with index.html)
+     ========================================================= */
+  .foot{border-top:1px solid var(--line);background:var(--surface-2)}
+  .foot-in{
+    max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,72px) 24px clamp(28px,3vw,36px);
+    display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:clamp(28px,4vw,56px);
+  }
+  .foot-brand .brand{font-size:19px}
+  .foot-brand p{margin-top:14px;max-width:300px;font-size:14px;line-height:1.95;color:var(--muted)}
+  .foot-social{margin-top:20px;display:flex;gap:10px}
+  .foot-social a{
+    width:38px;height:38px;border-radius:10px;display:grid;place-items:center;
+    background:#fff;border:1px solid var(--line);color:var(--ink-2);
+    transition:background-color .2s ease,color .2s ease,transform .2s ease;
+  }
+  .foot-social a:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
+  .foot-social svg{width:18px;height:18px}
+  .foot-col h4{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:.01em}
+  .foot-col ul{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:11px}
+  .foot-col a{font-size:14px;color:var(--muted);text-decoration:none;transition:color .2s ease}
+  .foot-col a:hover{color:var(--ink)}
+  .foot-contact li{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--muted)}
+  .foot-contact svg{width:16px;height:16px;flex:none;color:var(--accent)}
+  .foot-bottom{
+    max-width:1240px;margin:0 auto;padding:20px 24px;border-top:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    font-size:13px;color:var(--muted);
+  }
+  .foot-bottom a{color:var(--muted);text-decoration:none}
+  .foot-bottom a:hover{color:var(--ink)}
+  @media (max-width:900px){ .foot-in{grid-template-columns:1fr 1fr} }
+  @media (max-width:560px){
+    .foot-in{grid-template-columns:1fr}
+    .foot-bottom{flex-direction:column;align-items:flex-start}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}
+  }
+</style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-in">
+      <a class="brand" href="index.html"><b></b>وت پلاس</a>
+      <ul class="links">
+        <li><a href="index.html">خانه</a></li>
+        <li><a href="articles.html" class="active" aria-current="page">مقالات</a></li>
+        <li><a href="index.html#pricing">تعرفه‌ها</a></li>
+        <li><a href="index.html#download">دانلود</a></li>
+        <li><a href="index.html#contact">ارتباط با ما</a></li>
+      </ul>
+      <div class="actions">
+        <a class="btn btn-ghost" href="index.html#login">ورود</a>
+        <a class="btn btn-primary" href="index.html#demo">دریافت اکانت دمو</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== Hero ===================== -->
+  <section class="art-hero">
+    <div class="wrap">
+      <div class="art-hero-grid">
+        <div class="art-hero-copy reveal">
+          <span class="eyebrow">بلاگ وت پلاس</span>
+          <h1>مقالات و راهنماها</h1>
+          <p class="lead">در این بخش، جدیدترین مقالات، آموزش‌ها و نکات کاربردی برای مدیریت بهتر کلینیک دامپزشکی را بخوانید.</p>
+          <form class="searchbar" role="search" onsubmit="return false">
+            <label for="q" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">جستجو در مقالات</label>
+            <input id="q" type="search" placeholder="جستجو در مقالات…" autocomplete="off">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          </form>
+        </div>
+        <div class="art-hero-media reveal">
+          <img src="assets/art-hero.jpg" alt="دامپزشک در حال معاینهٔ یک سگ در کلینیک" loading="eager" width="1120" height="840">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Body ===================== -->
+  <section class="art-body">
+    <div class="wrap">
+      <div class="art-layout">
+        <!-- main column -->
+        <div class="art-main">
+          <!-- category filter pills -->
+          <div class="filters reveal" role="group" aria-label="فیلتر دسته‌بندی">
+            <button class="pill-filter" data-filter="all" aria-pressed="true">همه</button>
+            <button class="pill-filter" data-filter="clinic" aria-pressed="false">مدیریت کلینیک</button>
+            <button class="pill-filter" data-filter="software" aria-pressed="false">آموزش نرم‌افزار</button>
+            <button class="pill-filter" data-filter="inventory" aria-pressed="false">دارو و موجودی</button>
+            <button class="pill-filter" data-filter="finance" aria-pressed="false">مالی و حسابداری</button>
+            <button class="pill-filter" data-filter="records" aria-pressed="false">پرونده الکترونیک</button>
+            <button class="pill-filter" data-filter="tech" aria-pressed="false">تکنولوژی و نوآوری</button>
+          </div>
+
+          <!-- featured -->
+          <article class="feat-art reveal" data-cat="clinic">
+            <div class="thumb"><img src="assets/art-scheduling.jpg" alt="لپ‌تاپ با داشبورد نوبت‌دهی کلینیک" loading="lazy"></div>
+            <div class="fa-body">
+              <span class="cat-tag">مدیریت کلینیک</span>
+              <h2><a href="#">چگونه فرآیند نوبت‌دهی را در کلینیک دامپزشکی بهینه کنیم؟</a></h2>
+              <p>با استفاده از یک نرم‌افزار مدیریت کلینیک، می‌توانید نوبت‌دهی را سریع‌تر، دقیق‌تر و بدون خطا انجام دهید و تجربهٔ بهتری برای مراجعین و تیم درمانی خود ایجاد کنید.</p>
+              <div class="meta">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>۱۲ فروردین ۱۴۰۴</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>۸ دقیقه مطالعه</span>
+                <a class="read-more" href="#" aria-label="ادامهٔ مطلب"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+          </article>
+
+          <!-- grid -->
+          <div class="cards reveal" id="cards">
+            <!-- 1 -->
+            <article class="card" data-cat="records" style="--d:0ms">
+              <div class="thumb"><img src="assets/art-records.jpg" alt="معاینهٔ یک گربه در کلینیک" loading="lazy"></div>
+              <div class="card-body">
+                <span class="cat-tag">پرونده الکترونیک</span>
+                <h3><a href="#">مزایای استفاده از پروندهٔ الکترونیک در کلینیک دامپزشکی</a></h3>
+                <div class="meta">
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>۳۰ فروردین ۱۴۰۴</span>
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>۶ دقیقه مطالعه</span>
+                </div>
+              </div>
+            </article>
+            <!-- 2 -->
+            <article class="card" data-cat="inventory" style="--d:70ms">
+              <div class="thumb"><img src="assets/art-inventory.jpg" alt="قفسه‌های داروی کلینیک دامپزشکی" loading="lazy"></div>
+              <div class="card-body">
+                <span class="cat-tag">دارو و موجودی</span>
+                <h3><a href="#">چطور موجودی دارو و تجهیزات کلینیک را به‌درستی مدیریت کنیم؟</a></h3>
+                <div class="meta">
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>۲۵ فروردین ۱۴۰۴</span>
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>۵ دقیقه مطالعه</span>
+                </div>
+              </div>
+            </article>
+            <!-- 3 -->
+            <article class="card" data-cat="finance" style="--d:140ms">
+              <div class="thumb"><img src="assets/art-finance.jpg" alt="نمودارهای مالی روی تبلت و لپ‌تاپ" loading="lazy"></div>
+              <div class="card-body">
+                <span class="cat-tag">مالی و حسابداری</span>
+                <h3><a href="#">گزارش‌های مالی مهم برای مدیران کلینیک دامپزشکی</a></h3>
+                <div class="meta">
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>۱۰ فروردین ۱۴۰۴</span>
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>۷ دقیقه مطالعه</span>
+                </div>
+              </div>
+            </article>
+            <!-- 4 (placeholder cover) -->
+            <article class="card" data-cat="software" style="--d:210ms">
+              <div class="thumb"><div class="thumb-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M7 10l2 2 2-3 2 2 3-4"/></svg></div></div>
+              <div class="card-body">
+                <span class="cat-tag">آموزش نرم‌افزار</span>
+                <h3><a href="#">آموزش کامل کار با سیستم نوبت‌دهی نرم‌افزار وت پلاس</a></h3>
+                <div class="meta">
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>۵ فروردین ۱۴۰۴</span>
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>۷ دقیقه مطالعه</span>
+                </div>
+              </div>
+            </article>
+            <!-- 5 (placeholder cover) -->
+            <article class="card" data-cat="tech" style="--d:280ms">
+              <div class="thumb"><div class="thumb-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/><circle cx="12" cy="12" r="4"/></svg></div></div>
+              <div class="card-body">
+                <span class="cat-tag">تکنولوژی و نوآوری</span>
+                <h3><a href="#">آیندهٔ کلینیک‌های دامپزشکی و نقش فناوری در آن</a></h3>
+                <div class="meta">
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>۲۸ اسفند ۱۴۰۳</span>
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>۶ دقیقه مطالعه</span>
+                </div>
+              </div>
+            </article>
+            <!-- 6 (placeholder cover) -->
+            <article class="card" data-cat="clinic" style="--d:350ms">
+              <div class="thumb"><div class="thumb-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/><path d="M12 3v3"/></svg></div></div>
+              <div class="card-body">
+                <span class="cat-tag">مدیریت کلینیک</span>
+                <h3><a href="#">چک‌لیست راه‌اندازی کلینیک دامپزشکی از صفر تا صد</a></h3>
+                <div class="meta">
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg>۲۰ اسفند ۱۴۰۳</span>
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>۹ دقیقه مطالعه</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <p class="no-result" id="noResult">مقاله‌ای با این مشخصات پیدا نشد.</p>
+        </div>
+
+        <!-- sidebar -->
+        <aside class="side">
+          <div class="side-card reveal">
+            <div class="side-head">
+              <h3>دسته‌بندی‌ها</h3>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+            </div>
+            <ul class="cat-list">
+              <li><a href="#" class="active" data-filter="all">همه مقالات <span class="count">۳۳</span></a></li>
+              <li><a href="#" data-filter="clinic">مدیریت کلینیک <span class="count">۸</span></a></li>
+              <li><a href="#" data-filter="software">آموزش نرم‌افزار <span class="count">۶</span></a></li>
+              <li><a href="#" data-filter="inventory">دارو و موجودی <span class="count">۵</span></a></li>
+              <li><a href="#" data-filter="finance">مالی و حسابداری <span class="count">۴</span></a></li>
+              <li><a href="#" data-filter="records">پرونده الکترونیک <span class="count">۴</span></a></li>
+              <li><a href="#" data-filter="tech">تکنولوژی و نوآوری <span class="count">۳</span></a></li>
+            </ul>
+          </div>
+
+          <div class="side-cta reveal">
+            <h3>آماده‌اید کلینیک خود را هوشمندتر مدیریت کنید؟</h3>
+            <p>با نرم‌افزار مدیریت کلینیک دامپزشکی وت پلاس، همه‌چیز یک‌جا و همگام است.</p>
+            <a href="index.html#demo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+              دریافت اکانت دمو
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Newsletter ===================== -->
+  <section class="newsletter">
+    <div class="nl-in">
+      <div class="nl-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="9" r="4"/><path d="M14.5 6.5c1.4 0 2.5 1.1 2.5 2.5M14.5 3.5c3 0 5.5 2.5 5.5 5.5"/><path d="M2 21v-1a6 6 0 0 1 12 0v1"/></svg>
+      </div>
+      <div class="nl-copy">
+        <h2>به‌روز بمانید</h2>
+        <p>برای دریافت جدیدترین مقالات و آموزش‌ها، ایمیل خود را وارد کنید.</p>
+      </div>
+      <form class="nl-form" onsubmit="return false">
+        <label for="nlEmail" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">ایمیل شما</label>
+        <input id="nlEmail" type="email" placeholder="ایمیل شما" autocomplete="email">
+        <button type="submit" aria-label="عضویت">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===================== Footer ===================== -->
+  <footer class="foot" id="contact">
+    <div class="foot-in">
+      <div class="foot-brand">
+        <a class="brand" href="index.html"><b></b>وت پلاس</a>
+        <p>پلتفرم یکپارچهٔ مدیریت کلینیک و بیمارستان دامپزشکی؛ پرونده الکترونیک، نوبت‌دهی، انبار دارو و حسابداری در یک جا.</p>
+        <div class="foot-social">
+          <a href="#" aria-label="اینستاگرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="تلگرام"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.3-4.9 9-8.1c.4-.3-.1-.5-.6-.2L5.8 13.1l-4.8-1.5c-1-.3-1-.9.2-1.4l18.8-7.2c.9-.3 1.6.2 1.1 1.3z"/></svg></a>
+          <a href="#" aria-label="واتساپ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.5A8.5 8.5 0 1 1 21 11.5z"/><path d="M8.5 9.5c0 3 2.5 5.5 5.5 5.5"/></svg></a>
+        </div>
+      </div>
+
+      <nav class="foot-col" aria-label="پیوندها">
+        <h4>وت پلاس</h4>
+        <ul>
+          <li><a href="index.html">خانه</a></li>
+          <li><a href="articles.html">مقالات و راهنماها</a></li>
+          <li><a href="index.html#pricing">تعرفه‌ها</a></li>
+          <li><a href="index.html#download">دانلود</a></li>
+        </ul>
+      </nav>
+
+      <nav class="foot-col" aria-label="امکانات">
+        <h4>امکانات</h4>
+        <ul>
+          <li><a href="index.html#features">پرونده الکترونیک</a></li>
+          <li><a href="index.html#features">نوبت‌دهی و یادآور</a></li>
+          <li><a href="index.html#resilience">کار آنلاین و آفلاین</a></li>
+          <li><a href="index.html#demo">اکانت دمو رایگان</a></li>
+        </ul>
+      </nav>
+
+      <div class="foot-col foot-contact">
+        <h4>ارتباط با ما</h4>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg><span>۰۲۱ - ۹۱۰۰ ۰۰۰۰</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 6 9-6"/></svg><span>support@wetplus.ir</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg><span>تهران، ایران</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© ۱۴۰۴ وت پلاس — تمامی حقوق محفوظ است.</span>
+      <span><a href="#">حریم خصوصی</a> · <a href="#">قوانین استفاده</a></span>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  /* scroll reveal */
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in');}); return; }
+  var io = new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });},{threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  els.forEach(function(e){io.observe(e);});
+})();
+
+(function(){
+  /* category filtering + text search */
+  var pills = Array.prototype.slice.call(document.querySelectorAll('.pill-filter'));
+  var sideLinks = Array.prototype.slice.call(document.querySelectorAll('.cat-list a'));
+  var feat = document.querySelector('.feat-art');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.cards .card'));
+  var search = document.getElementById('q');
+  var noResult = document.getElementById('noResult');
+  var cardsWrap = document.getElementById('cards');
+  var current = 'all';
+
+  function norm(s){ return (s||'').toLowerCase()
+    .replace(/[\u064A\u0649]/g,'\u06cc').replace(/\u0643/g,'\u06a9').trim(); }
+
+  function apply(){
+    var q = norm(search.value);
+    var shown = 0;
+
+    // featured respects category only; hides on text search for clarity
+    if(feat){
+      var fMatch = (current === 'all' || feat.getAttribute('data-cat') === current) && q === '';
+      feat.style.display = fMatch ? '' : 'none';
+    }
+
+    cards.forEach(function(c){
+      var catOk = current === 'all' || c.getAttribute('data-cat') === current;
+      var text = norm(c.textContent);
+      var qOk = q === '' || text.indexOf(q) !== -1;
+      var ok = catOk && qOk;
+      c.style.display = ok ? '' : 'none';
+      if(ok) shown++;
+    });
+
+    var featShown = feat && feat.style.display !== 'none';
+    noResult.style.display = (shown === 0 && !featShown) ? 'block' : 'none';
+  }
+
+  function setCat(cat){
+    current = cat;
+    pills.forEach(function(p){ p.setAttribute('aria-pressed', p.getAttribute('data-filter') === cat); });
+    sideLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('data-filter') === cat); });
+    // replay staggered entrance
+    if(cardsWrap){ cardsWrap.classList.remove('in'); void cardsWrap.offsetWidth; cardsWrap.classList.add('in'); }
+    apply();
+  }
+
+  pills.forEach(function(p){ p.addEventListener('click', function(){ setCat(p.getAttribute('data-filter')); }); });
+  sideLinks.forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); setCat(a.getAttribute('data-filter')); }); });
+  if(search){
+    var t; search.addEventListener('input', function(){ clearTimeout(t); t = setTimeout(apply, 120); });
+  }
+})();
+</script>
+</body>
+</html>
