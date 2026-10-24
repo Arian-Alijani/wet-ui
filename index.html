@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>وت پلاس | نرم‌افزار آنلاین مدیریت کلینیک دامپزشکی</title>
+<meta name="description" content="وت پلاس، نرم‌افزار ابری مدیریت کلینیک و بیمارستان دامپزشکی؛ پرونده الکترونیک حیوانات، نوبت‌دهی، یادآور واکسن، انبار دارو و حسابداری در یک پلتفرم یکپارچه و همگام میان چند کاربر.">
+<link rel="canonical" href="https://wetplus.ir/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:title" content="وت پلاس | نرم‌افزار آنلاین مدیریت کلینیک دامپزشکی">
+<meta property="og:description" content="مدیریت یکپارچه کلینیک دامپزشکی؛ پرونده، نوبت، واکسن، انبار و حسابداری — همگام و آنلاین.">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"وت پلاس",
+  "applicationCategory":"BusinessApplication",
+  "operatingSystem":"Web",
+  "inLanguage":"fa",
+  "url":"https://wetplus.ir/",
+  "description":"نرم‌افزار ابری مدیریت کلینیک دامپزشکی با پرونده الکترونیک، نوبت‌دهی، یادآور واکسن، انبار دارو و حسابداری."
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#0f0f0f;
+    --ink-2:#37352f;
+    --muted:#787774;
+    --line:rgba(15,15,15,.09);
+    --frame-bg:#f7f7f5;
+
+    /* rotating pill tokens */
+    --pill-bg:#d3f5d8;
+    --pill-dot:#22a447;
+    --pill-ink:#0f0f0f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg)}
+  body{
+    font-family:"Vazirmatn",system-ui,sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ---------- Header ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.78);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{
+    max-width:1240px;margin:0 auto;
+    height:64px;padding:0 24px;
+    display:flex;align-items:center;gap:32px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:8px;
+    font-weight:800;font-size:18px;letter-spacing:-.01em;
+    color:var(--ink);text-decoration:none;
+  }
+  .brand b{width:9px;height:9px;border-radius:50%;background:#22a447;display:block}
+  .links{display:flex;gap:4px;list-style:none}
+  .links a{
+    display:block;padding:8px 12px;border-radius:8px;
+    font-size:14.5px;font-weight:500;color:var(--ink-2);text-decoration:none;
+    transition:background-color .2s ease,color .2s ease;
+  }
+  .links a:hover{background:#f1f1ef;color:var(--ink)}
+  .actions{margin-inline-start:auto;display:flex;align-items:center;gap:8px}
+  .btn{
+    display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:9px;
+    font:600 14px/1 "Vazirmatn",sans-serif;text-decoration:none;white-space:nowrap;
+    transition:background-color .2s ease,transform .2s ease;
+  }
+  .btn-ghost{color:var(--ink)}
+  .btn-ghost:hover{background:#f1f1ef}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:#2a2a28}
+  .btn-primary:active{transform:scale(.98)}
+  @media (max-width:720px){
+    .links{display:none}
+    .nav-in{height:58px;padding:0 16px}
+    .btn{height:36px;padding:0 12px;font-size:13px}
+  }
+
+  .hero{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:clamp(56px,9vh,104px) 24px 0;
+    overflow:hidden;
+  }
+
+  /* ---------- Headline ---------- */
+  .title{
+    font-weight:900;
+    font-size:clamp(48px,8.2vw,112px);
+    line-height:1.12;
+    letter-spacing:-.025em;
+    text-align:center;
+    color:var(--ink);
+    opacity:0;transform:translateY(14px);
+    animation:rise .9s cubic-bezier(.2,.7,.2,1) .05s forwards;
+  }
+
+  .line{
+    margin-top:clamp(10px,1.6vw,20px);
+    display:flex;align-items:center;justify-content:center;gap:.32em;
+    font-weight:800;
+    font-size:clamp(28px,4.6vw,64px);
+    line-height:1.2;
+    letter-spacing:-.02em;
+    white-space:nowrap;
+    opacity:0;transform:translateY(14px);
+    animation:rise .9s cubic-bezier(.2,.7,.2,1) .18s forwards;
+  }
+
+  /* ---------- Rotating pill ---------- */
+  .pill{
+    position:relative;
+    display:inline-flex;align-items:center;
+    height:1.42em;
+    padding:0 .42em 0 .5em;
+    border-radius:999px;
+    background:var(--pill-bg);
+    transition:width .6s cubic-bezier(.65,0,.25,1), background-color .6s ease;
+    overflow:hidden;
+  }
+  .pill .dot{
+    flex:none;
+    width:.34em;height:.34em;border-radius:50%;
+    background:var(--pill-dot);
+    margin-inline-end:.26em;
+    transition:background-color .6s ease;
+  }
+  .pill .viewport{
+    position:relative;height:1.42em;flex:1;
+    overflow:hidden;
+  }
+  .pill .word{
+    position:absolute;inset-inline-start:0;top:0;
+    height:1.42em;line-height:1.42em;
+    font-weight:600;
+    color:var(--pill-ink);
+    white-space:nowrap;
+    transition:transform .6s cubic-bezier(.65,0,.25,1), opacity .45s ease, filter .45s ease;
+  }
+  .pill .word.enter{transform:translateY(100%);opacity:0;filter:blur(3px)}
+  .pill .word.leave{transform:translateY(-100%);opacity:0;filter:blur(3px)}
+  .measure{position:absolute;visibility:hidden;white-space:nowrap;font-weight:600;pointer-events:none}
+
+  .fixed{color:var(--ink)}
+
+  .sub{
+    margin-top:clamp(14px,1.8vw,22px);
+    max-width:640px;
+    font-weight:400;
+    font-size:clamp(15px,1.45vw,19px);
+    line-height:1.8;
+    color:var(--muted);
+    text-align:center;
+    text-wrap:pretty;
+    opacity:0;transform:translateY(14px);
+    animation:rise .9s cubic-bezier(.2,.7,.2,1) .26s forwards;
+  }
+
+  /* ---------- Video frame ---------- */
+  .stage{
+    width:min(1240px,100%);
+    margin-top:clamp(44px,6.5vw,84px);
+    opacity:0;transform:translateY(28px);
+    animation:rise 1.1s cubic-bezier(.2,.7,.2,1) .34s forwards;
+  }
+  .frame{
+    position:relative;z-index:1;
+    border-radius:16px;
+    background:var(--frame-bg);
+    border:1px solid var(--line);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.6) inset,
+      0 1px 2px rgba(15,15,15,.04),
+      0 12px 32px -8px rgba(15,15,15,.08),
+      0 48px 96px -32px rgba(15,15,15,.14);
+    overflow:hidden;
+  }
+  .bar{
+    height:40px;
+    display:flex;align-items:center;gap:8px;
+    padding:0 16px;
+    border-bottom:1px solid var(--line);
+    background:#fbfbfa;
+    direction:ltr;
+  }
+  .bar i{width:11px;height:11px;border-radius:50%;background:#e3e2e0;display:block}
+  .bar .addr{
+    margin:0 auto;
+    height:24px;min-width:min(320px,50%);
+    padding:0 14px;
+    border-radius:7px;
+    background:#f1f1ef;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    font:500 12px/1 "Vazirmatn",sans-serif;
+    color:var(--muted);
+    transform:translateX(-22px);
+  }
+  .bar .addr svg{width:11px;height:11px;opacity:.6}
+  .media{
+    position:relative;
+    aspect-ratio:16/9;
+    background:#fff;
+  }
+  .media video{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;display:block;
+  }
+
+  /* ---------- Line-art pets ---------- */
+  .stage{position:relative}
+  .pet{position:absolute;z-index:2;pointer-events:none;--s:1}
+  .pet svg{display:block;overflow:visible}
+  .pet .ln{fill:none;stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .pet .wf{fill:#fff;stroke:var(--ink);stroke-width:2.4;stroke-linejoin:round}
+  .pet .bk{fill:var(--ink)}
+
+  .pet-cat{right:9%;top:calc(-117px * var(--s))}
+  .pet-cat svg{width:calc(120px * var(--s));height:calc(170px * var(--s))}
+
+  .pet-in{opacity:0;transform:translateY(10px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+  .pet-cat .pet-in{animation-delay:1.05s}
+
+  .pet .eyes,.pet .c-head,.pet .c-body{transform-box:fill-box}
+  .pet .eyes{transform-origin:50% 50%;animation:blink 4.8s infinite}
+
+  /* ---------- hover interactions ---------- */
+  .pet .hit{fill:transparent;stroke:none;pointer-events:all;cursor:pointer}
+  .pet .hit-tail{fill:none;stroke:transparent;stroke-width:30;pointer-events:stroke;cursor:pointer}
+
+  .pet .happy{opacity:0;transition:opacity .25s ease}
+  .pet .open{transition:opacity .2s ease}
+  .ease-soft{transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+
+  /* cat: head tilts, eyes close contentedly */
+  .pet-cat .c-head{transform-origin:50% 100%}
+  .pet-cat:has(.hit-body:hover) .c-head{transform:rotate(-7deg) translateY(-1px)}
+  .pet-cat:has(.hit-body:hover) .open,
+  .pet-cat.tap .open{opacity:0}
+  .pet-cat:has(.hit-body:hover) .happy,
+  .pet-cat.tap .happy{opacity:1}
+
+  /* cat: eyes softly follow the pointer (offset set from JS) */
+  .pet-cat .look{transition:transform .35s cubic-bezier(.25,.8,.3,1)}
+
+  /* cat: tiny squash-and-settle on click */
+  .pet-cat .c-body{transform-origin:50% 100%}
+  .pet-cat.tap .c-body{animation:catTap .55s cubic-bezier(.3,.7,.3,1)}
+  .pet-cat .hit-body{cursor:pointer}
+
+  /* hearts popping out on click */
+  .heart{position:absolute;left:50%;top:calc(6px * var(--s));
+    width:calc(18px * var(--s));height:calc(18px * var(--s));
+    margin-left:calc(-9px * var(--s));pointer-events:none;
+    animation:heartUp 1.15s cubic-bezier(.2,.7,.3,1) forwards}
+  .heart svg{width:100%;height:100%;display:block;overflow:visible}
+
+  @keyframes catTap{0%{transform:none}28%{transform:scale(1.035,.965)}60%{transform:scale(.99,1.012) translateY(-1px)}100%{transform:none}}
+  @keyframes heartUp{
+    0%{opacity:0;transform:translate(0,4px) scale(.4)}
+    18%{opacity:1;transform:translate(calc(var(--dx) * .3),-6px) scale(1.08)}
+    32%{transform:translate(calc(var(--dx) * .45),-12px) scale(1)}
+    100%{opacity:0;transform:translate(var(--dx),-46px) scale(.9) rotate(var(--rot))}}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+
+  @media (max-width:1000px){
+    .pet{--s:.78}
+  }
+  @media (max-width:640px){
+    .pet{--s:.56}
+  }
+
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* =========================================================
+     Shared section primitives
+     ========================================================= */
+  .sec{padding:clamp(96px,14vw,168px) 24px 0}
+  .wrap{max-width:1240px;margin:0 auto}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.01em;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--pill-dot,#22a447)}
+  .h2{
+    margin-top:16px;
+    font-weight:800;
+    font-size:clamp(30px,4.2vw,52px);line-height:1.25;letter-spacing:-.02em;
+    text-wrap:balance;
+  }
+  .lead{
+    margin-top:18px;max-width:560px;
+    font-size:clamp(15px,1.3vw,17.5px);line-height:2;color:var(--muted);
+    text-wrap:pretty;
+  }
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* =========================================================
+     About / SEO intro
+     ========================================================= */
+  .about-grid{
+    display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+    gap:clamp(40px,7vw,112px);align-items:start;
+  }
+  .about-head{position:sticky;top:112px}
+  .about-copy p + p{margin-top:12px}
+  .about-copy strong{color:var(--ink);font-weight:600}
+
+  .facts{
+    margin-top:36px;display:flex;gap:clamp(24px,4vw,48px);
+    padding-top:24px;border-top:1px solid var(--line);
+  }
+  .facts dt{font-size:13px;color:var(--muted);font-weight:500}
+  .facts dd{margin-top:4px;font-size:clamp(22px,2.2vw,28px);font-weight:800;letter-spacing:-.02em}
+
+  .features{
+    list-style:none;
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    border-top:1px solid var(--line);
+  }
+  .feature{
+    position:relative;
+    padding:28px 0 30px;
+    border-bottom:1px solid var(--line);
+  }
+  .feature:nth-child(odd){padding-inline-end:32px}
+  .feature:nth-child(even){padding-inline-start:32px;border-inline-start:1px solid var(--line)}
+  .f-ico{
+    width:36px;height:36px;border-radius:10px;
+    display:grid;place-items:center;
+    background:#f1f1ef;color:var(--ink);
+    transition:background-color .35s ease,color .35s ease,transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .f-ico svg{width:18px;height:18px}
+  .feature:hover .f-ico{background:var(--ink);color:#fff;transform:translateY(-2px)}
+  .feature h3{margin-top:18px;font-size:16.5px;font-weight:700;letter-spacing:-.01em}
+  .feature p{margin-top:8px;font-size:14.5px;line-height:1.9;color:var(--muted);text-wrap:pretty}
+
+  @media (max-width:900px){
+    .about-grid{grid-template-columns:1fr}
+    .about-head{position:static}
+  }
+  @media (max-width:560px){
+    .features{grid-template-columns:1fr}
+    .feature:nth-child(n){padding-inline:0;border-inline-start:0}
+    .facts{flex-wrap:wrap}
+  }
+
+  /* =========================================================
+     Live sync — two accounts, relay playback
+     ========================================================= */
+  .sync{padding-bottom:clamp(96px,14vw,168px)}
+  .sync-head{text-align:center;display:flex;flex-direction:column;align-items:center}
+  .sync-head .lead{margin-inline:auto}
+
+  .relay{
+    --accent:#22a447;
+    --accent-soft:rgba(34,164,71,.14);
+    margin-top:clamp(48px,6vw,80px);
+    display:grid;grid-template-columns:minmax(0,1fr) clamp(64px,8vw,120px) minmax(0,1fr);
+    align-items:center;
+  }
+
+  /* --- device card --- */
+  .node{position:relative;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+  .node .frame{
+    transition:box-shadow .9s ease,border-color .9s ease;
+  }
+  .node .media{aspect-ratio:16/10;background:#f7f7f5;overflow:hidden}
+  .node video{
+    transition:filter 1s ease,transform 1.2s cubic-bezier(.2,.7,.2,1),opacity 1s ease;
+    filter:grayscale(1) contrast(.92) brightness(1.04);
+    opacity:.55;transform:scale(1.02);
+  }
+  .node .bar{gap:10px}
+  .node .bar .who{
+    margin-inline-start:auto;direction:rtl;
+    display:flex;align-items:center;gap:7px;
+    font:600 12px/1 "Vazirmatn",sans-serif;color:var(--muted);
+  }
+
+  /* status dot with live pulse */
+  .stat{position:relative;width:7px;height:7px;border-radius:50%;background:#c9c8c5;transition:background-color .6s ease}
+  .stat::after{
+    content:"";position:absolute;inset:-4px;border-radius:50%;
+    border:1.5px solid var(--accent);opacity:0;
+  }
+
+  /* progress hairline */
+  .prog{position:absolute;inset-inline:0;bottom:0;height:2px;background:transparent;z-index:2}
+  .prog i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:right;transform:scaleX(0)}
+
+  /* standby veil */
+  .veil{
+    position:absolute;inset:0;z-index:1;
+    display:grid;place-items:center;
+    transition:opacity .7s ease;
+    pointer-events:none;
+  }
+  .veil span{
+    display:inline-flex;align-items:center;gap:8px;
+    height:30px;padding:0 12px;border-radius:999px;
+    background:rgba(255,255,255,.86);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border:1px solid var(--line);
+    font-size:12.5px;font-weight:600;color:var(--ink-2);
+  }
+  .veil span::before{
+    content:"";width:12px;height:12px;border-radius:50%;
+    border:1.5px solid #c9c8c5;border-top-color:var(--ink);
+    animation:spin 1s linear infinite;
+  }
+
+  /* arrival ripple */
+  .ripple{
+    position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:16px;
+    box-shadow:0 0 0 0 var(--accent-soft);
+  }
+
+  .cap{
+    margin-top:18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    padding-inline:4px;
+  }
+  .cap b{font-size:15px;font-weight:700}
+  .cap small{font-size:13px;color:var(--muted);font-weight:500;font-variant-numeric:tabular-nums}
+
+  /* --- active state --- */
+  .node.is-live{transform:translateY(-6px)}
+  .node.is-live .frame{
+    border-color:rgba(34,164,71,.35);
+    box-shadow:
+      0 0 0 4px var(--accent-soft),
+      0 1px 2px rgba(15,15,15,.04),
+      0 16px 40px -10px rgba(15,15,15,.12),
+      0 56px 110px -36px rgba(15,15,15,.2);
+  }
+  .node.is-live video{filter:none;opacity:1;transform:none}
+  .node.is-live .veil{opacity:0}
+  .node.is-live .stat{background:var(--accent)}
+  .node.is-live .stat::after{animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite}
+  .node.is-live .who{color:var(--ink)}
+  .node.arrive .ripple{animation:ripple 1s cubic-bezier(.2,.7,.2,1)}
+
+  /* --- connector --- */
+  .link{position:relative;height:100%;display:grid;place-items:center}
+  .track{
+    position:relative;width:100%;height:2px;
+    background-image:linear-gradient(to left,var(--line) 50%,transparent 0);
+    background-size:8px 2px;
+  }
+  .track::before,.track::after{
+    content:"";position:absolute;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;
+    background:#fff;border:1.5px solid #d6d5d2;transition:border-color .5s ease,background-color .5s ease;
+  }
+  .track::before{right:-5px}
+  .track::after{left:-5px}
+  .relay[data-live="a"] .track::before,
+  .relay[data-live="b"] .track::after{border-color:var(--accent);background:var(--accent)}
+
+  .packet{
+    position:absolute;top:50%;right:0;
+    width:10px;height:10px;margin:-5px -5px 0 0;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 4px var(--accent-soft),0 0 18px 2px rgba(34,164,71,.45);
+    opacity:0;
+  }
+  .packet::after{ /* comet tail */
+    content:"";position:absolute;top:50%;right:100%;height:2px;width:44px;margin-top:-1px;
+    background:linear-gradient(to left,var(--accent),transparent);border-radius:2px;
+    transform-origin:right;
+  }
+  .relay.sending .packet{animation:travel .95s cubic-bezier(.65,0,.35,1) forwards}
+  .relay.sending.rev .packet{animation-name:travelRev}
+  .relay.sending.rev .packet::after{right:auto;left:100%;background:linear-gradient(to right,var(--accent),transparent)}
+
+  .link-tag{
+    position:absolute;top:calc(50% + 18px);left:50%;transform:translateX(-50%);
+    font-size:11.5px;font-weight:600;color:var(--muted);white-space:nowrap;
+    opacity:0;transition:opacity .4s ease;
+  }
+  .relay.sending .link-tag{opacity:1}
+
+  /* --- legend under the relay --- */
+  .relay-foot{
+    margin-top:clamp(36px,5vw,56px);
+    display:flex;justify-content:center;
+  }
+  .steps{
+    display:inline-flex;gap:6px;padding:5px;border-radius:999px;
+    background:#f7f7f5;border:1px solid var(--line);
+  }
+  .steps button{
+    all:unset;cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;
+    height:32px;padding:0 14px;border-radius:999px;
+    font-size:13px;font-weight:600;color:var(--muted);
+    transition:background-color .4s ease,color .4s ease,box-shadow .4s ease;
+  }
+  .steps button i{font-style:normal;font-variant-numeric:tabular-nums;opacity:.6}
+  .steps button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(15,15,15,.06),0 0 0 1px var(--line)}
+  .steps button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+  @keyframes travel{
+    0%{right:0;opacity:0}
+    12%{opacity:1}
+    88%{opacity:1}
+    100%{right:100%;opacity:0}
+  }
+  @keyframes travelRev{
+    0%{right:100%;opacity:0}
+    12%{opacity:1}
+    88%{opacity:1}
+    100%{right:0;opacity:0}
+  }
+  @keyframes ping{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+  @keyframes ripple{
+    0%{box-shadow:0 0 0 0 rgba(34,164,71,.38)}
+    100%{box-shadow:0 0 0 28px rgba(34,164,71,0)}
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  @media (max-width:820px){
+    .relay{grid-template-columns:1fr;grid-template-rows:auto 72px auto}
+    .link{height:72px}
+    .track{
+      width:2px;height:100%;
+      background-image:linear-gradient(to bottom,var(--line) 50%,transparent 0);
+      background-size:2px 8px;
+    }
+    .track::before,.track::after{left:50%;right:auto;margin:0 0 0 -4.5px;top:auto}
+    .track::before{top:-5px}
+    .track::after{bottom:-5px}
+    .packet{right:50%;top:0;margin:-5px -5px 0 0}
+    .packet::after,.relay.sending.rev .packet::after{
+      right:50%;left:auto;top:auto;bottom:100%;width:2px;height:36px;margin:0 -1px 0 0;
+      background:linear-gradient(to top,var(--accent),transparent);
+    }
+    .relay.sending.rev .packet::after{bottom:auto;top:100%;background:linear-gradient(to bottom,var(--accent),transparent)}
+    .link-tag{top:50%;left:calc(50% + 16px);transform:translateY(-50%)}
+    @keyframes travel{0%{top:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:100%;opacity:0}}
+    @keyframes travelRev{0%{top:100%;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:0;opacity:0}}
+    .node.is-live{transform:none}
+  }
+
+  /* =========================================================
+     Pricing
+     ========================================================= */
+  .pricing{position:relative}
+  .pricing-head{text-align:center;display:flex;flex-direction:column;align-items:center}
+  .pricing-head .eyebrow{justify-content:center}
+  .pricing-head .lead{margin-inline:auto}
+
+  /* billing toggle */
+  .toggle{
+    margin-top:clamp(28px,3.4vw,40px);
+    display:inline-flex;gap:4px;padding:5px;border-radius:999px;
+    background:#f7f7f5;border:1px solid var(--line);
+    position:relative;align-self:center;
+  }
+  .toggle button{
+    all:unset;cursor:pointer;position:relative;z-index:1;
+    display:inline-flex;align-items:center;gap:7px;
+    height:38px;padding:0 18px;border-radius:999px;
+    font:600 14px/1 "Vazirmatn",sans-serif;color:var(--muted);
+    transition:color .35s ease;
+    white-space:nowrap;
+  }
+  .toggle button .save{
+    font-size:11px;font-weight:700;color:#12894a;
+    background:#d3f5d8;border-radius:999px;padding:3px 7px;line-height:1;
+  }
+  .toggle button[aria-selected="true"]{color:var(--ink)}
+  .toggle button[aria-selected="true"] .save{background:#bdedc6}
+  .toggle .thumb{
+    position:absolute;z-index:0;top:5px;bottom:5px;width:0;
+    border-radius:999px;background:#fff;opacity:0;
+    box-shadow:0 1px 2px rgba(15,15,15,.08),0 0 0 1px var(--line);
+    transition:transform .45s cubic-bezier(.65,0,.25,1),width .45s cubic-bezier(.65,0,.25,1),opacity .3s ease;
+  }
+  .toggle .thumb.ready{opacity:1}
+  .toggle button:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:999px}
+
+  /* plan grid */
+  .plans{
+    margin-top:clamp(40px,5vw,64px);
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:clamp(16px,1.8vw,24px);align-items:stretch;
+  }
+  .plan{
+    position:relative;display:flex;flex-direction:column;
+    padding:clamp(26px,2.4vw,34px);
+    border-radius:20px;
+    background:#fff;border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(15,15,15,.03),0 10px 30px -22px rgba(15,15,15,.18);
+    transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease;
+  }
+  .plan:hover{
+    transform:translateY(-6px);
+    border-color:rgba(15,15,15,.14);
+    box-shadow:0 1px 2px rgba(15,15,15,.04),0 28px 60px -30px rgba(15,15,15,.28);
+  }
+  /* spotlighted by the billing toggle */
+  .plan.spot:not(.feat){
+    border-color:rgba(34,164,71,.5);
+    box-shadow:0 0 0 3px rgba(34,164,71,.14),0 1px 2px rgba(15,15,15,.04),0 24px 56px -28px rgba(15,15,15,.26);
+  }
+  .plan.feat.spot{box-shadow:0 0 0 4px rgba(34,164,71,.28),0 1px 2px rgba(15,15,15,.1),0 34px 80px -30px rgba(15,15,15,.55)}
+  /* featured plan (recommended) */
+  .plan.feat{
+    background:
+      radial-gradient(130% 100% at 100% 0%,rgba(34,164,71,.08),transparent 60%),
+      #0f0f0f;
+    border-color:#0f0f0f;color:#fff;
+    box-shadow:0 1px 2px rgba(15,15,15,.1),0 30px 70px -28px rgba(15,15,15,.5);
+  }
+  .plan.feat:hover{transform:translateY(-10px);box-shadow:0 1px 2px rgba(15,15,15,.1),0 40px 90px -32px rgba(15,15,15,.6)}
+  .plan.feat .p-name{color:#fff}
+  .plan.feat .p-desc,.plan.feat .p-users,.plan.feat .p-period,.plan.feat .p-note{color:rgba(255,255,255,.66)}
+  .plan.feat .p-amount{color:#fff}
+  .plan.feat .p-feat li{color:rgba(255,255,255,.9)}
+  .plan.feat .p-feat svg{color:#5ad67f}
+  .plan.feat .p-users{background:rgba(255,255,255,.1);color:#fff}
+  .plan.feat .p-old{color:rgba(255,255,255,.4)}
+
+  .p-badge{
+    position:absolute;top:-13px;inset-inline-start:50%;transform:translateX(50%);
+    display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 13px;border-radius:999px;
+    background:#22a447;color:#fff;font:700 12px/1 "Vazirmatn",sans-serif;white-space:nowrap;
+    box-shadow:0 6px 16px -6px rgba(34,164,71,.7);
+  }
+  .p-badge svg{width:12px;height:12px}
+
+  .p-name{font-size:18px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+  .p-desc{margin-top:6px;font-size:13.5px;line-height:1.7;color:var(--muted)}
+
+  .p-users{
+    margin-top:18px;align-self:flex-start;
+    display:inline-flex;align-items:center;gap:7px;
+    height:30px;padding:0 12px;border-radius:999px;
+    background:#f1f1ef;color:var(--ink-2);
+    font-size:13px;font-weight:600;
+  }
+  .p-users svg{width:15px;height:15px}
+
+  .p-price{margin-top:22px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .p-amount{
+    font-size:clamp(34px,3.6vw,44px);font-weight:900;letter-spacing:-.03em;
+    color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;
+    transition:opacity .3s ease,transform .3s ease;
+  }
+  .p-amount .cur{font-size:.44em;font-weight:700;margin-inline-start:4px}
+  .p-period{font-size:13.5px;color:var(--muted);font-weight:500}
+  .p-old{
+    margin-top:8px;font-size:13px;color:#9a9893;font-weight:500;min-height:18px;
+  }
+  .p-old s{text-decoration-thickness:1.5px}
+
+  .p-cta{
+    margin-top:22px;display:inline-flex;align-items:center;justify-content:center;
+    height:46px;border-radius:12px;
+    font:700 15px/1 "Vazirmatn",sans-serif;text-decoration:none;
+    transition:background-color .25s ease,transform .2s ease,box-shadow .25s ease;
+  }
+  .plan .p-cta{background:#f1f1ef;color:var(--ink)}
+  .plan .p-cta:hover{background:#e7e7e4}
+  .plan .p-cta:active{transform:scale(.985)}
+  .plan.feat .p-cta{background:#22a447;color:#fff;box-shadow:0 10px 24px -10px rgba(34,164,71,.8)}
+  .plan.feat .p-cta:hover{background:#1d9440}
+
+  .p-feat{list-style:none;margin-top:26px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:13px}
+  .plan.feat .p-feat{border-top-color:rgba(255,255,255,.14)}
+  .p-feat li{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;color:var(--ink-2)}
+  .p-feat svg{flex:none;width:18px;height:18px;margin-top:1px;color:#22a447}
+
+  .pricing-foot{
+    margin-top:clamp(28px,3.4vw,40px);text-align:center;
+    font-size:13.5px;color:var(--muted);
+  }
+  .pricing-foot svg{width:14px;height:14px;vertical-align:-2px;margin-inline-end:5px;opacity:.7}
+
+  @media (max-width:900px){
+    .plans{grid-template-columns:1fr;max-width:460px;margin-inline:auto}
+    .plan.feat{order:-1}
+  }
+
+  @media (max-width:640px){
+    .line{flex-direction:column;gap:.15em;white-space:normal}
+    .frame{border-radius:12px}
+    .bar{height:32px}
+    .bar .addr{display:none}
+    .toggle{flex-wrap:wrap;justify-content:center}
+    .toggle button{height:34px;padding:0 13px;font-size:13px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}
+    .pet .happy,.heart{display:none}
+    .node.is-live .veil,.packet,.ripple{display:none}
+  }
+</style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-in">
+      <a class="brand" href="#"><b></b>وت پلاس</a>
+      <ul class="links">
+        <li><a href="#pricing">تعرفه</a></li>
+        <li><a href="#contact">ارتباط با ما</a></li>
+      </ul>
+      <div class="actions">
+        <a class="btn btn-ghost" href="#login">ورود</a>
+        <a class="btn btn-primary" href="#demo">دریافت اکانت دمو</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" data-screen-label="Hero">
+    <h1 class="title">پلتفرم وت پلاس</h1>
+
+    <p class="line" aria-live="polite">
+      <span class="pill" id="pill">
+        <span class="dot"></span>
+        <span class="viewport" id="vp"><span class="word" id="w0">مدیریت کلینیک</span></span>
+      </span>
+      <span class="fixed">با وت پلاس</span>
+    </p>
+
+    <p class="sub">پلتفرم مدیریت کلینیک وت پلاس، برای مدیریت آسان، کارآمد و هوشمند</p>
+
+    <div class="stage">
+      <div class="frame">
+        <div class="bar" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <div class="addr">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="5.5" width="7" height="5" rx="1"/><path d="M4 5.5V4a2 2 0 0 1 4 0v1.5"/></svg>
+            wetplus.ir
+          </div>
+        </div>
+        <div class="media">
+          <video src="assets/hero.mp4" autoplay muted loop playsinline preload="auto"></video>
+        </div>
+      </div>
+
+      <!-- Cat: sitting on the top edge, tail hanging over the frame -->
+      <div class="pet pet-cat" aria-hidden="true">
+        <svg class="pet-in" viewBox="0 0 120 170">
+          <defs>
+            <pattern id="hatch" width="4.5" height="4.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="4.5" stroke="#0f0f0f" stroke-width="1.3"/>
+            </pattern>
+            <path id="ctailBase" d="M84 114 C98 116 104 128 100 142 C97 152 90 156 92 164">
+              <animate class="idle-sway" attributeName="d" dur="5.2s" repeatCount="indefinite" calcMode="spline"
+                keyTimes="0;.25;.5;.75;1" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1"
+                values="M84 114 C98 116 104 128 100 142 C97 152 90 156 92 164;
+                        M84 114 C100 118 101 131 97 144 C94 154 99 160 106 161;
+                        M84 114 C98 116 104 128 100 142 C97 152 90 156 92 164;
+                        M84 114 C97 115 107 126 105 140 C103 151 95 158 87 159;
+                        M84 114 C98 116 104 128 100 142 C97 152 90 156 92 164"/>
+            </path>
+          </defs>
+          <!-- tail -->
+          <g class="ctail" fill="none" stroke-linecap="round">
+            <use href="#ctailBase" stroke="#0f0f0f" stroke-width="10"/>
+            <use href="#ctailBase" stroke="#fff" stroke-width="5.2"/>
+            <use href="#ctailBase" stroke="url(#hatch)" stroke-width="5.2" opacity=".85"/>
+          </g>
+          <g class="c-body">
+          <!-- body: one soft silhouette — narrow neck, rounded haunches -->
+          <path class="wf" d="M47 62 C40 71 37 81 37 91 C37 99 30 104 29.5 111 C29 115.5 31.5 118 35 118 L85 118 C88.5 118 91 115.5 90.5 111 C90 104 83 99 83 91 C83 81 80 71 73 62 Z"/>
+          <!-- tabby haunches -->
+          <path d="M40.5 95 C47 100 49 110 47 118 L35 118 C31.5 118 29 115.5 29.5 111 C30 104 37 99 37 91 C37.6 92.6 38.8 94 40.5 95 Z" fill="url(#hatch)" opacity=".85"/>
+          <path d="M79.5 95 C73 100 71 110 73 118 L85 118 C88.5 118 91 115.5 90.5 111 C90 104 83 99 83 91 C82.4 92.6 81.2 94 79.5 95 Z" fill="url(#hatch)" opacity=".85"/>
+          <path class="ln" d="M40.5 95 C47 100 49 110 47 118 M79.5 95 C73 100 71 110 73 118"/>
+          <!-- chest tuft + front paws -->
+          <path class="ln" d="M53.5 72 L56.8 75.5 L60 72.5 L63.2 75.5 L66.5 72" stroke-width="1.6"/>
+          <path class="ln" d="M60 96 V112.5"/>
+          <path class="wf" d="M48.5 118 C48.5 113.5 51 111.5 54 111.5 C57 111.5 59.5 113.5 59.5 118 M60.5 118 C60.5 113.5 63 111.5 66 111.5 C69 111.5 71.5 113.5 71.5 118"/>
+          <!-- head -->
+          <g class="c-head ease-soft">
+            <path class="wf" d="M40 41 L37 17 L53 30 Q60 28 67 30 L83 17 L80 41 Q87 53 78 63 Q60 73 42 63 Q33 53 40 41 Z"/>
+            <path class="ln" d="M42 26 L44 35 M78 26 L76 35" stroke-width="1.6"/>
+            <path class="ln" d="M56 33 L57 38 M60 32 V37 M64 33 L63 38" stroke-width="1.8"/>
+            <g class="look" id="catLook">
+              <g class="eyes open"><circle class="bk" cx="51" cy="47" r="2.6"/><circle class="bk" cx="69" cy="47" r="2.6"/></g>
+              <path class="ln happy" d="M47.5 48 Q51 44.5 54.5 48 M65.5 48 Q69 44.5 72.5 48" stroke-width="2"/>
+            </g>
+            <path class="bk" d="M57.5 53 H62.5 L60 56 Z"/>
+            <path class="ln" d="M60 56 Q58 59.5 55 58 M60 56 Q62 59.5 65 58" stroke-width="1.8"/>
+            <path class="ln" d="M45 53 L33 51 M45 57 L34 59 M75 53 L87 51 M75 57 L86 59" stroke-width="1.5"/>
+          </g>
+          </g>
+          <!-- hover / click targets -->
+          <rect class="hit hit-body" id="catHit" x="29" y="16" width="62" height="102"/>
+          <use href="#ctailBase" class="hit-tail" id="ctailHit"/>
+        </svg>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= About / SEO ================= -->
+  <section class="sec about" id="about" aria-labelledby="about-title" data-screen-label="About">
+    <div class="wrap about-grid">
+      <div class="about-head reveal">
+        <span class="eyebrow">درباره وت پلاس</span>
+        <h2 class="h2" id="about-title">نرم‌افزار آنلاین مدیریت کلینیک دامپزشکی</h2>
+        <div class="lead about-copy">
+          <p><strong>وت پلاس</strong> یک پلتفرم ابری برای کلینیک‌ها، بیمارستان‌ها و مطب‌های دامپزشکی است که پذیرش، پرونده درمانی، نوبت‌دهی، انبار دارو و حسابداری را در یک محیط ساده و یکپارچه جمع می‌کند.</p>
+          <p>بدون نصب و بدون نیاز به سرور؛ کافی است وارد شوید و از هر دستگاهی، هم‌زمان با تیم خود کار کنید.</p>
+        </div>
+        <dl class="facts">
+          <div><dt>راه‌اندازی</dt><dd>کمتر از ۱۰ دقیقه</dd></div>
+          <div><dt>دسترسی</dt><dd>۲۴/۷ ابری</dd></div>
+        </dl>
+      </div>
+
+      <ul class="features reveal" role="list">
+        <li class="feature">
+          <span class="f-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+          <h3>پرونده الکترونیک حیوان</h3>
+          <p>سوابق معاینه، نسخه، آزمایش و تصاویر هر بیمار در یک تایم‌لاین منظم و قابل جست‌وجو.</p>
+        </li>
+        <li class="feature">
+          <span class="f-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h2M14 14h2M8 17h2"/></svg></span>
+          <h3>نوبت‌دهی هوشمند</h3>
+          <p>تقویم مشترک پزشکان، رزرو آنلاین و جلوگیری خودکار از تداخل نوبت‌ها.</p>
+        </li>
+        <li class="feature">
+          <span class="f-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+          <h3>یادآور واکسن و درمان</h3>
+          <p>ارسال پیامک خودکار برای واکسیناسیون، ضدانگل و ویزیت‌های دوره‌ای به صاحبان حیوانات.</p>
+        </li>
+        <li class="feature">
+          <span class="f-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg></span>
+          <h3>انبار دارو و تجهیزات</h3>
+          <p>کنترل موجودی، تاریخ انقضا و هشدار کمبود؛ کسر خودکار از انبار هنگام ثبت نسخه.</p>
+        </li>
+        <li class="feature">
+          <span class="f-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span>
+          <h3>حسابداری و گزارش مالی</h3>
+          <p>صدور فاکتور، صندوق روزانه، تسویه پزشکان و گزارش‌های تحلیلی درآمد در یک نگاه.</p>
+        </li>
+        <li class="feature">
+          <span class="f-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <h3>چندکاربره و هم‌زمان</h3>
+          <p>سطح دسترسی جدا برای پزشک، پذیرش و حسابدار؛ تغییرات در لحظه برای همه همگام می‌شود.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= Live sync (two accounts) ================= -->
+  <section class="sec sync" id="sync" aria-labelledby="sync-title" data-screen-label="Live sync">
+    <div class="wrap">
+      <header class="sync-head reveal">
+        <span class="eyebrow">همگام‌سازی لحظه‌ای</span>
+        <h2 class="h2" id="sync-title">دو حساب، یک کلینیک؛ همیشه آنلاین</h2>
+        <p class="lead">هر تغییری که پذیرش ثبت کند، همان لحظه روی صفحه پزشک ظاهر می‌شود. بدون رفرش، بدون انتظار.</p>
+      </header>
+
+      <div class="relay reveal" id="relay" data-live="">
+        <!-- Account A -->
+        <figure class="node" data-node="a">
+          <div class="frame">
+            <div class="bar" aria-hidden="true">
+              <i></i><i></i><i></i>
+              <span class="who"><span class="stat"></span>حساب پذیرش</span>
+            </div>
+            <div class="media">
+              <video src="assets/sync-1.mp4" muted playsinline preload="metadata" aria-label="ویدیو ثبت اطلاعات در حساب پذیرش"></video>
+              <div class="veil"><span>در انتظار تغییر…</span></div>
+              <div class="prog"><i></i></div>
+            </div>
+            <div class="ripple"></div>
+          </div>
+          <figcaption class="cap"><b>۱. ثبت در پذیرش</b><small data-time>۰:۰۰</small></figcaption>
+        </figure>
+
+        <!-- connector -->
+        <div class="link" aria-hidden="true">
+          <div class="track"><span class="packet"></span></div>
+          <span class="link-tag">ارسال در لحظه</span>
+        </div>
+
+        <!-- Account B -->
+        <figure class="node" data-node="b">
+          <div class="frame">
+            <div class="bar" aria-hidden="true">
+              <i></i><i></i><i></i>
+              <span class="who"><span class="stat"></span>حساب پزشک</span>
+            </div>
+            <div class="media">
+              <video src="assets/sync-2.mp4" muted playsinline preload="metadata" aria-label="ویدیو دریافت لحظه‌ای اطلاعات در حساب پزشک"></video>
+              <div class="veil"><span>در انتظار تغییر…</span></div>
+              <div class="prog"><i></i></div>
+            </div>
+            <div class="ripple"></div>
+          </div>
+          <figcaption class="cap"><b>۲. دریافت توسط پزشک</b><small data-time>۰:۰۰</small></figcaption>
+        </figure>
+      </div>
+
+      <div class="relay-foot">
+        <div class="steps" role="group" aria-label="انتخاب ویدیو">
+          <button type="button" data-go="a" aria-pressed="false"><i>۰۱</i>پذیرش</button>
+          <button type="button" data-go="b" aria-pressed="false"><i>۰۲</i>پزشک</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Pricing ================= -->
+  <section class="sec pricing" id="pricing" aria-labelledby="pricing-title" data-screen-label="Pricing">
+    <div class="wrap">
+      <header class="pricing-head reveal">
+        <span class="eyebrow">تعرفه‌ها</span>
+        <h2 class="h2" id="pricing-title">پلنی که اندازه کلینیک شماست</h2>
+        <p class="lead">همهٔ امکانات وت پلاس در تمام پلن‌ها فعال است؛ فقط مدت اشتراک و تعداد کاربران فرق می‌کند. هرچه بلندمدت‌تر، مقرون‌به‌صرفه‌تر.</p>
+
+        <div class="toggle reveal" id="billToggle" role="tablist" aria-label="دورهٔ پرداخت">
+          <span class="thumb" id="billThumb"></span>
+          <button role="tab" type="button" data-bill="monthly" aria-selected="false">ماهانه</button>
+          <button role="tab" type="button" data-bill="half"    aria-selected="true">شش‌ماهه<span class="save">٪۱۸ تخفیف</span></button>
+          <button role="tab" type="button" data-bill="yearly"  aria-selected="false">سالانه<span class="save">٪۳۳ تخفیف</span></button>
+        </div>
+      </header>
+
+      <div class="plans reveal">
+        <!-- Monthly -->
+        <article class="plan" data-plan="monthly">
+          <h3 class="p-name">ماهانه</h3>
+          <p class="p-desc">مناسب شروع کار و آشنایی کامل با امکانات وت پلاس.</p>
+          <span class="p-users">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            تا ۲ کاربر هم‌زمان
+          </span>
+          <div class="p-price">
+            <span class="p-amount">۱٫۵<span class="cur">میلیون تومان</span></span>
+            <span class="p-period">/ ماهانه</span>
+          </div>
+          <p class="p-old">هر ماه تمدید می‌شود</p>
+          <a class="p-cta" href="#demo">شروع کنید</a>
+          <ul class="p-feat">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تمام امکانات نرم‌افزار</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پرونده الکترونیک نامحدود</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبانی آنلاین</li>
+          </ul>
+        </article>
+
+        <!-- 6-month (featured) -->
+        <article class="plan feat" data-plan="half">
+          <span class="p-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            پیشنهاد ویژه
+          </span>
+          <h3 class="p-name">شش‌ماهه</h3>
+          <p class="p-desc">محبوب‌ترین انتخاب کلینیک‌ها؛ تعادل عالی قیمت و مدت.</p>
+          <span class="p-users">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            تا ۴ کاربر هم‌زمان
+          </span>
+          <div class="p-price">
+            <span class="p-amount">۷٫۴<span class="cur">میلیون تومان</span></span>
+            <span class="p-period">/ شش‌ماهه</span>
+          </div>
+          <p class="p-old">به‌جای <s>۹ میلیون</s> — ۱٫۶ میلیون صرفه‌جویی</p>
+          <a class="p-cta" href="#demo">خرید اشتراک شش‌ماهه</a>
+          <ul class="p-feat">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تمام امکانات پلن ماهانه</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>۲ کاربر بیشتر</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبانی اولویت‌دار</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>آموزش اختصاصی تیم</li>
+          </ul>
+        </article>
+
+        <!-- Yearly -->
+        <article class="plan" data-plan="yearly">
+          <h3 class="p-name">سالانه</h3>
+          <p class="p-desc">بیشترین صرفه‌جویی و بالاترین ظرفیت برای تیم‌های بزرگ‌تر.</p>
+          <span class="p-users">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            تا ۵ کاربر هم‌زمان
+          </span>
+          <div class="p-price">
+            <span class="p-amount">۱۲<span class="cur">میلیون تومان</span></span>
+            <span class="p-period">/ سالانه</span>
+          </div>
+          <p class="p-old">به‌جای <s>۱۸ میلیون</s> — ۶ میلیون صرفه‌جویی</p>
+          <a class="p-cta" href="#demo">خرید اشتراک سالانه</a>
+          <ul class="p-feat">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>تمام امکانات پلن شش‌ماهه</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>۵ کاربر هم‌زمان</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبانی اختصاصی VIP</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پشتیبان‌گیری خودکار ابری</li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="pricing-foot reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+        همهٔ قیمت‌ها به تومان و شامل به‌روزرسانی رایگان است. نیاز به ظرفیت بیشتر دارید؟ <a href="#contact" style="color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px">با ما تماس بگیرید</a>.
+      </p>
+    </div>
+  </section>
+
+<script>
+(function(){
+  /* scroll reveal */
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
+  const io = new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  }),{threshold:.15, rootMargin:'0px 0px -8% 0px'});
+  els.forEach(e=>io.observe(e));
+})();
+(function(){
+  /* relay: video A ends -> packet travels -> video B starts (and loops back) */
+  const relay = document.getElementById('relay');
+  if(!relay) return;
+  const FALLBACK = 6;           // seconds, used if a video is missing / can't load
+  const TRAVEL = 950;           // ms, must match .packet animation
+  const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+  const fmt = t => { t = Math.max(0, Math.floor(t)); return fa(Math.floor(t/60) + ':' + String(t%60).padStart(2,'0')); };
+
+  const nodes = {};
+  relay.querySelectorAll('.node').forEach(el=>{
+    const v = el.querySelector('video');
+    const n = { el, v, bar:el.querySelector('.prog i'), time:el.querySelector('[data-time]'), broken:false, t0:0 };
+    v.addEventListener('error', ()=>{ n.broken = true; });
+    v.addEventListener('ended', ()=>{ if(cur === n) handoff(); });
+    nodes[el.dataset.node] = n;
+  });
+  const btns = document.querySelectorAll('.steps button');
+
+  let cur = null, key = 'a', raf = 0, visible = false, sendT = 0;
+
+  function dur(n){ return (!n.broken && isFinite(n.v.duration) && n.v.duration) || FALLBACK; }
+  function pos(n){ return n.broken ? (performance.now() - n.t0) / 1000 : n.v.currentTime; }
+
+  function tick(){
+    raf = 0;
+    if(!cur || !visible) return;
+    const p = Math.min(pos(cur) / dur(cur), 1);
+    cur.bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    cur.time.textContent = fmt(pos(cur));
+    if(cur.broken && p >= 1){ handoff(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function activate(k){
+    clearTimeout(sendT);
+    relay.classList.remove('sending','rev');
+    Object.values(nodes).forEach(n=>{
+      if(n !== nodes[k]){ n.v.pause(); n.el.classList.remove('is-live','arrive'); }
+    });
+    key = k; cur = nodes[k];
+    relay.dataset.live = k;
+    btns.forEach(b=>b.setAttribute('aria-pressed', b.dataset.go === k));
+    cur.bar.style.transform = 'scaleX(0)';
+    cur.el.classList.remove('arrive'); void cur.el.offsetWidth;
+    cur.el.classList.add('is-live','arrive');
+    try{ cur.v.currentTime = 0; }catch(e){}
+    cur.t0 = performance.now();
+    if(visible) play();
+  }
+
+  function play(){
+    if(!cur) return;
+    if(!cur.broken){
+      const pr = cur.v.play();
+      if(pr && pr.catch) pr.catch(()=>{ cur.broken = true; cur.t0 = performance.now(); });
+    }
+    if(!raf) raf = requestAnimationFrame(tick);
+  }
+
+  function handoff(){
+    const from = key, to = key === 'a' ? 'b' : 'a';
+    cancelAnimationFrame(raf); raf = 0;
+    cur.bar.style.transform = 'scaleX(1)';
+    cur.el.classList.remove('is-live');
+    cur = null;
+    relay.dataset.live = '';
+    relay.classList.remove('sending','rev'); void relay.offsetWidth;
+    relay.classList.add('sending');
+    if(from === 'b') relay.classList.add('rev');
+    sendT = setTimeout(()=>activate(to), TRAVEL);
+  }
+
+  btns.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.go)));
+
+  /* only run while on screen */
+  new IntersectionObserver(([e])=>{
+    visible = e.isIntersecting;
+    if(visible){
+      if(!cur && !relay.classList.contains('sending')) activate(key);
+      else if(cur) play();
+    } else if(cur){ cur.v.pause(); }
+  },{threshold:.35}).observe(relay);
+
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden && cur) cur.v.pause();
+    else if(!document.hidden && visible && cur) play();
+  });
+})();
+(function(){
+  /* ----------------------------------------------------------------
+     Cat tail "magnet" — the tail tip is gently drawn toward the
+     pointer once the pointer has actually touched the tail, then
+     springs back with soft damping. It never snaps rigidly onto the
+     cursor: the pull is capped and eased so it reads like petting.
+     ---------------------------------------------------------------- */
+  const cat  = document.querySelector('.pet-cat');
+  const svg  = cat && cat.querySelector('svg');
+  const base = document.getElementById('ctailBase');      // visible tail paths (via <use>)
+  const hit  = document.getElementById('ctailHit');
+  if(!cat || !svg || !base || !hit) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Pause / resume the idle SMIL sway so it doesn't fight the magnet.
+  // (The idle sway is the only SMIL animation inside this SVG; the blink
+  //  and head tilt are CSS, so pausing the SVG timeline is safe here.)
+  let swayPaused = false;
+  function pauseSway(){ if(swayPaused) return; try{ svg.pauseAnimations(); swayPaused = true; }catch(e){} }
+  function resumeSway(){ if(!swayPaused) return; try{ svg.unpauseAnimations(); swayPaused = false; }catch(e){} }
+
+  // Fixed anchor of the tail where it leaves the body (SVG user units).
+  const ROOT = {x:84, y:114};
+  // Rest control points of the hanging tail (matches the base "d").
+  const REST = {
+    c1:{x:98,  y:116},
+    c2:{x:104, y:128},
+    mid:{x:100,y:142},
+    c3:{x:97,  y:152},
+    c4:{x:90,  y:156},
+    tip:{x:92, y:164}
+  };
+
+  // How hard the tail is being pulled, 0..1 (eased toward target each frame).
+  let pull = 0, pullTarget = 0;
+  // Direction the pointer is relative to the tail tip (SVG units).
+  let dirX = 0, dirY = 0, dirXT = 0, dirYT = 0;
+  let engaged = false;           // pointer has touched the tail at least this session
+  let raf = 0, idle = true;
+
+  // Convert a client point into the svg's viewBox coordinate space.
+  function toSvg(cx, cy){
+    const r = svg.getBoundingClientRect();
+    const vb = svg.viewBox.baseVal;
+    return {
+      x: (cx - r.left) / r.width  * vb.width,
+      y: (cy - r.top)  / r.height * vb.height
+    };
+  }
+
+  // Build the tail "d" given current pull + direction, with a little
+  // natural curvature so it arcs toward the finger instead of pointing straight.
+  function buildPath(){
+    const p = pull;
+    // the tip is displaced toward the pointer, capped so it stays natural
+    const reach = 26 * p;                       // max travel of the tip (svg units)
+    const tipX = REST.tip.x + dirX * reach;
+    const tipY = REST.tip.y + dirY * reach;
+    // mid of the tail follows ~45% of the way, giving a smooth bend
+    const midX = REST.mid.x + dirX * reach * 0.42;
+    const midY = REST.mid.y + dirY * reach * 0.42;
+    // control points lerp toward a gentle S that leads into the bend
+    const c2X = REST.c2.x + dirX * reach * 0.30;
+    const c2Y = REST.c2.y + dirY * reach * 0.30;
+    const c3X = REST.c3.x + dirX * reach * 0.55;
+    const c3Y = REST.c3.y + dirY * reach * 0.55;
+    const c4X = REST.c4.x + dirX * reach * 0.80;
+    const c4Y = REST.c4.y + dirY * reach * 0.80;
+    return `M${ROOT.x} ${ROOT.y} C${REST.c1.x} ${REST.c1.y} ${c2X.toFixed(1)} ${c2Y.toFixed(1)} ${midX.toFixed(1)} ${midY.toFixed(1)} C${c3X.toFixed(1)} ${c3Y.toFixed(1)} ${c4X.toFixed(1)} ${c4Y.toFixed(1)} ${tipX.toFixed(1)} ${tipY.toFixed(1)}`;
+  }
+
+  function applyPath(d){
+    base.setAttribute('d', d);
+  }
+
+  function loop(){
+    raf = 0;
+    // ease pull & direction toward their targets (spring-ish damping)
+    pull += (pullTarget - pull) * 0.14;
+    dirX += (dirXT - dirX) * 0.18;
+    dirY += (dirYT - dirY) * 0.18;
+
+    if(pull > 0.004 || pullTarget > 0.004){
+      pauseSway();                 // freeze idle sway so JS drives the tail
+      applyPath(buildPath());
+      idle = false;
+      raf = requestAnimationFrame(loop);
+    } else if(!idle){
+      // fully settled: hand the tail back to the idle SMIL sway cleanly
+      pull = 0;
+      resumeSway();                // idle sway takes over the "d" again
+      idle = true;
+    }
+  }
+  function kick(){ if(!raf) raf = requestAnimationFrame(loop); }
+
+  // engage the magnet when the pointer touches the tail's hit stroke
+  hit.addEventListener('pointerenter', ()=>{ engaged = true; });
+  hit.addEventListener('pointerleave', ()=>{
+    engaged = false;
+    pullTarget = 0;            // release — tail eases home
+    kick();
+  });
+
+  // follow the pointer; strength grows as it nears the tail tip
+  addEventListener('pointermove', (e)=>{
+    if(!engaged) return;
+    const p = toSvg(e.clientX, e.clientY);
+    const dx = p.x - REST.tip.x;
+    const dy = p.y - REST.tip.y;
+    const dist = Math.hypot(dx, dy) || 1;
+    dirXT = dx / dist;
+    dirYT = dy / dist;
+    // closer pointer -> stronger pull, but capped at 1 and never rigid
+    pullTarget = Math.max(0, Math.min(1, 1 - (dist - 10) / 70));
+    kick();
+  }, {passive:true});
+
+  // if the pointer lifts entirely, release
+  addEventListener('pointerup',    ()=>{ pullTarget = 0; kick(); }, {passive:true});
+  document.addEventListener('pointerleave', ()=>{ engaged = false; pullTarget = 0; kick(); });
+})();
+(function(){
+  const cat = document.querySelector('.pet-cat');
+  const svg = cat && cat.querySelector('svg');
+  const look = document.getElementById('catLook');
+  const hit = document.getElementById('catHit');
+  if(!cat || !svg || !look || !hit) return;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // eyes: small, eased offset toward the pointer (max ~1.8 viewBox units)
+  const MAX = 1.8;
+  let raf = 0, px = 0, py = 0;
+  function aim(){
+    raf = 0;
+    const r = svg.getBoundingClientRect();
+    const ex = r.left + r.width * .5, ey = r.top + r.height * (47/170);
+    const dx = px - ex, dy = py - ey;
+    const d = Math.hypot(dx, dy) || 1;
+    const k = Math.min(d / 220, 1) * MAX;   // closer pointer = gentler offset
+    look.style.transform = `translate(${(dx/d*k).toFixed(2)}px, ${(dy/d*k*.8).toFixed(2)}px)`;
+  }
+  if(!calm){
+    addEventListener('pointermove', e=>{
+      px = e.clientX; py = e.clientY;
+      if(!raf) raf = requestAnimationFrame(aim);
+    }, {passive:true});
+    document.documentElement.addEventListener('pointerleave', ()=>{ look.style.transform = ''; });
+  }
+
+  // click: little squash + a heart that floats up and fades
+  let tapT = 0, hearts = 0;
+  const HEART = '<svg viewBox="0 0 20 18"><path d="M10 16.5 C4 12.5 1.5 9.6 1.5 6.2 C1.5 3.6 3.5 1.6 6 1.6 C7.7 1.6 9.1 2.6 10 4 C10.9 2.6 12.3 1.6 14 1.6 C16.5 1.6 18.5 3.6 18.5 6.2 C18.5 9.6 16 12.5 10 16.5 Z" fill="#ffb4c2" stroke="#0f0f0f" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+  hit.addEventListener('click', ()=>{
+    cat.classList.remove('tap'); void cat.offsetWidth; cat.classList.add('tap');
+    clearTimeout(tapT); tapT = setTimeout(()=>cat.classList.remove('tap'), 700);
+    if(calm || hearts >= 4) return;
+    const h = document.createElement('span');
+    h.className = 'heart';
+    h.innerHTML = HEART;
+    h.style.setProperty('--dx', (Math.random()*20 - 10).toFixed(1) + 'px');
+    h.style.setProperty('--rot', (Math.random()*24 - 12).toFixed(1) + 'deg');
+    hearts++;
+    h.addEventListener('animationend', ()=>{ h.remove(); hearts--; }, {once:true});
+    cat.appendChild(h);
+  });
+})();
+(function(){
+  /* Pricing billing toggle: moves the sliding thumb and spotlights the
+     matching plan card so the three durations feel like one control. */
+  const toggle = document.getElementById('billToggle');
+  const thumb  = document.getElementById('billThumb');
+  if(!toggle || !thumb) return;
+  const btns  = [...toggle.querySelectorAll('button')];
+  const plans = [...document.querySelectorAll('.plan')];
+
+  function moveThumb(btn){
+    thumb.style.width = btn.offsetWidth + 'px';
+    // RTL-aware: offsetLeft is measured from the left edge in all directions
+    thumb.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+    thumb.classList.add('ready');
+  }
+
+  function select(key, focus){
+    btns.forEach(b=>{
+      const on = b.dataset.bill === key;
+      b.setAttribute('aria-selected', on);
+      if(on){ moveThumb(b); if(focus) b.focus(); }
+    });
+    // spotlight the matching plan (lift + ring) without hard scrolling
+    plans.forEach(p=>p.classList.toggle('spot', p.dataset.plan === key));
+  }
+
+  btns.forEach((b,i)=>{
+    b.addEventListener('click', ()=>select(b.dataset.bill));
+    b.addEventListener('keydown', e=>{
+      if(e.key!=='ArrowLeft' && e.key!=='ArrowRight') return;
+      e.preventDefault();
+      // in RTL, ArrowLeft goes to the next (visually left) tab
+      const dir = (e.key==='ArrowLeft') ? 1 : -1;
+      const n = (i + dir + btns.length) % btns.length;
+      select(btns[n].dataset.bill, true);
+    });
+  });
+
+  // init: featured (6-month) selected; re-measure thumb after fonts/layout settle
+  function init(){ const cur = btns.find(b=>b.getAttribute('aria-selected')==='true') || btns[0]; select(cur.dataset.bill); }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(init); } else { init(); }
+  addEventListener('resize', ()=>{ const cur = btns.find(b=>b.getAttribute('aria-selected')==='true'); if(cur) moveThumb(cur); });
+})();
+(function(){
+  const items = [
+    { text:"مدیریت کلینیک", bg:"#d3f5d8", dot:"#22a447" },
+    { text:"حسابداری",       bg:"#cdecea", dot:"#1f8f86" },
+    { text:"کلینیک هوشمند",  bg:"#dbe9fb", dot:"#2f7ae5" }
+  ];
+  const pill = document.getElementById('pill');
+  const vp = document.getElementById('vp');
+  const root = document.documentElement;
+
+  const meas = document.createElement('span');
+  meas.className = 'measure';
+  pill.appendChild(meas);
+
+  function widthFor(text){
+    meas.textContent = text;
+    const cs = getComputedStyle(pill);
+    const dot = pill.querySelector('.dot');
+    const dcs = getComputedStyle(dot);
+    return meas.getBoundingClientRect().width
+      + dot.getBoundingClientRect().width
+      + parseFloat(dcs.marginInlineEnd || dcs.marginLeft)
+      + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + 1;
+  }
+
+  let i = 0;
+  function apply(idx){
+    const it = items[idx];
+    root.style.setProperty('--pill-bg', it.bg);
+    root.style.setProperty('--pill-dot', it.dot);
+    pill.style.width = widthFor(it.text) + 'px';
+  }
+
+  function next(){
+    i = (i + 1) % items.length;
+    // every word currently in the viewport leaves — nothing can get stranded
+    vp.querySelectorAll('.word').forEach(o=>{
+      o.classList.remove('enter');
+      o.classList.add('leave');
+      setTimeout(()=>o.remove(), 650);
+    });
+    const w = document.createElement('span');
+    w.className = 'word enter';
+    w.textContent = items[i].text;
+    vp.appendChild(w);
+    apply(i);
+    void w.offsetWidth; // commit the .enter state synchronously
+    w.classList.remove('enter');
+  }
+
+  let timer = null;
+  function start(){ if(!timer) timer = setInterval(next, 2600); }
+  function stop(){ clearInterval(timer); timer = null; }
+  document.addEventListener('visibilitychange', ()=> document.hidden ? stop() : start());
+
+  document.fonts.ready.then(()=>{
+    apply(0);
+    if(!document.hidden) start();
+  });
+  addEventListener('resize', ()=>apply(i));
+})();
+</script>
+</body>
+</html>
