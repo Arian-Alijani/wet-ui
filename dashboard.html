@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ناحیه کاربری | وت پلاس</title>
+<meta name="description" content="ناحیه کاربری وت پلاس؛ مدیریت پلن اشتراک، تاریخچه خریدها، اعتبار پنل پیامک و خرید اشتراک در یک محیط ساده و یکپارچه.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --ink:#0f0f0f;
+    --ink-2:#37352f;
+    --muted:#787774;
+    --line:rgba(15,15,15,.09);
+    --line-2:rgba(15,15,15,.055);
+    --surface:#ffffff;
+    --surface-2:#fbfbfa;
+
+    /* brand green */
+    --accent:#22a447;
+    --accent-ink:#1d9440;
+    --accent-strong:#12894a;
+    --accent-soft:rgba(34,164,71,.14);
+    --accent-weak:rgba(34,164,71,.06);
+    --accent-tint:#e7f7ec;
+
+    /* sms / amber */
+    --warn:#e0872a;
+    --warn-soft:rgba(224,135,42,.14);
+    --warn-tint:#fef8f1;
+    --warn-strong:#b96a16;
+
+    /* info / blue (for sms count) */
+    --info:#2f6fe0;
+    --info-soft:rgba(47,111,224,.12);
+    --info-tint:#eef4fe;
+    --info-strong:#245bc0;
+
+    --radius:16px;
+    --radius-sm:11px;
+    --shadow:0 1px 2px rgba(15,15,15,.04),0 10px 30px -18px rgba(15,15,15,.22);
+    --shadow-soft:0 1px 2px rgba(15,15,15,.04);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Vazirmatn",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+  a:focus-visible,button:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--accent);outline-offset:3px;border-radius:8px;
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  /* ---------- Header ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.82);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{
+    max-width:1180px;margin:0 auto;height:64px;padding:0 24px;
+    display:flex;align-items:center;gap:24px;
+  }
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+  .brand b{width:9px;height:9px;border-radius:50%;background:var(--accent);display:block}
+  .nav-sep{width:1px;height:22px;background:var(--line);margin-inline-start:4px}
+  .nav-crumb{font-size:14px;font-weight:600;color:var(--muted)}
+  .nav-actions{margin-inline-start:auto;display:flex;align-items:center;gap:10px}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 15px;border-radius:10px;
+    font:600 14px/1 "Vazirmatn",sans-serif;text-decoration:none;white-space:nowrap;cursor:pointer;border:0;
+    transition:background-color .2s ease,transform .15s ease,box-shadow .2s ease,color .2s ease;
+  }
+  .btn svg{width:17px;height:17px}
+  .btn-ghost{color:var(--ink);background:transparent}
+  .btn-ghost:hover{background:#f1f1ef}
+  .btn-line{color:var(--ink);background:#fff;border:1px solid var(--line)}
+  .btn-line:hover{background:#f7f7f5}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:#2a2a28}
+  .btn-primary:active{transform:scale(.98)}
+  .btn-accent{background:var(--accent);color:#fff;box-shadow:0 10px 22px -12px rgba(34,164,71,.9)}
+  .btn-accent:hover{background:var(--accent-ink);transform:translateY(-1px)}
+  .btn-accent:active{transform:scale(.98)}
+  .btn:disabled,.btn.is-disabled{opacity:.55;cursor:not-allowed;pointer-events:none;filter:grayscale(.1)}
+
+  /* user chip */
+  .user-chip{display:flex;align-items:center;gap:10px;padding:5px 12px 5px 6px;border:1px solid var(--line);border-radius:999px;background:#fff}
+  .avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#1a7f38);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+  .user-chip .u-name{font-size:13.5px;font-weight:600}
+  .user-chip .u-role{font-size:11.5px;color:var(--muted)}
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:1180px;margin:0 auto;padding:32px 24px 72px}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+  .page-head h1{font-size:clamp(23px,3.4vw,30px);font-weight:800;letter-spacing:-.02em}
+  .page-head p{color:var(--muted);font-size:14.5px;margin-top:4px}
+
+  .grid{display:grid;gap:18px}
+  .cols-2{grid-template-columns:1.6fr 1fr}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:960px){.cols-2,.cols-3{grid-template-columns:1fr}}
+
+  /* ---------- Card ---------- */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-soft)}
+  .card-pad{padding:22px}
+  .card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line-2)}
+  .card-h h2,.card-h h3{font-size:15.5px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .card-h svg.ic{width:18px;height:18px;color:var(--muted)}
+  .card-h .link{font-size:13px;color:var(--accent-strong);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+  .card-h .link:hover{text-decoration:underline;text-underline-offset:3px}
+
+  /* badges */
+  .badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px;border-radius:999px;font-size:12.5px;font-weight:700}
+  .badge svg{width:13px;height:13px}
+  .badge.ok{background:var(--accent-tint);color:var(--accent-strong)}
+  .badge.warn{background:var(--warn-tint);color:var(--warn-strong)}
+  .badge.info{background:var(--info-tint);color:var(--info-strong)}
+  .badge.soft{background:#f1f1ef;color:var(--ink-2)}
+
+  /* ---------- Plan hero card ---------- */
+  .plan-hero{position:relative;overflow:hidden;background:
+    radial-gradient(120% 140% at 100% 0%,var(--accent-weak),transparent 55%),var(--surface)}
+  .plan-hero .card-pad{padding:24px}
+  .plan-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .plan-name{display:flex;align-items:center;gap:11px}
+  .plan-ic{width:44px;height:44px;border-radius:12px;background:var(--accent-tint);color:var(--accent-strong);display:grid;place-items:center;flex:none}
+  .plan-ic svg{width:23px;height:23px}
+  .plan-name h3{font-size:19px;font-weight:800;letter-spacing:-.01em}
+  .plan-name .meta{font-size:13px;color:var(--muted);margin-top:1px}
+
+  .plan-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+  .stat{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--radius-sm);padding:14px}
+  .stat .k{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .stat .k svg{width:14px;height:14px}
+  .stat .v{font-size:20px;font-weight:800;margin-top:7px;letter-spacing:-.01em}
+  .stat .v small{font-size:12.5px;font-weight:600;color:var(--muted);margin-inline-start:3px}
+  @media (max-width:560px){.plan-stats{grid-template-columns:1fr 1fr}}
+
+  /* progress */
+  .prog-wrap{margin-top:22px}
+  .prog-top{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-bottom:9px}
+  .prog-top b{font-weight:700}
+  .prog-top .muted{color:var(--muted)}
+  .bar{height:10px;border-radius:999px;background:#ececea;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#1a7f38);width:0;transition:width 1.1s cubic-bezier(.22,1,.36,1)}
+  .bar.warn>i{background:linear-gradient(90deg,var(--warn),#c76f16)}
+  .plan-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+
+  /* ---------- SMS / credit cards ---------- */
+  .mini{display:flex;flex-direction:column;gap:6px}
+  .mini .k{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .mini .k .dot{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none}
+  .mini .k .dot svg{width:15px;height:15px}
+  .mini .dot.amber{background:var(--warn-tint);color:var(--warn-strong)}
+  .mini .dot.blue{background:var(--info-tint);color:var(--info-strong)}
+  .mini .v{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+  .mini .v small{font-size:13px;font-weight:600;color:var(--muted);margin-inline-start:4px}
+  .mini .foot{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .sms-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:22px}
+  @media (max-width:560px){.sms-grid{grid-template-columns:1fr}}
+  .divider-v{width:1px;background:var(--line-2)}
+
+  /* ---------- Table (history) ---------- */
+  .tbl-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+  thead th{text-align:right;font-size:12.5px;font-weight:600;color:var(--muted);padding:13px 22px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  tbody td{padding:15px 22px;border-bottom:1px solid var(--line-2);vertical-align:middle;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr{transition:background-color .15s ease}
+  tbody tr:hover{background:var(--surface-2)}
+  .t-plan{font-weight:700}
+  .t-sub{font-size:12px;color:var(--muted);font-weight:500}
+  .t-amount{font-weight:700;font-variant-numeric:tabular-nums}
+  .pay{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px}
+  .pay svg{width:13px;height:13px}
+  .pay.done{background:var(--accent-tint);color:var(--accent-strong)}
+  .pay.pending{background:var(--warn-tint);color:var(--warn-strong)}
+  .pay.failed{background:#fdecec;color:#c0392b}
+
+  /* ---------- Add / buy subscription ---------- */
+  .buy{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:860px){.buy{grid-template-columns:1fr}}
+  .plan-opt{position:relative;border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:18px;background:#fff;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,transform .15s ease;display:flex;flex-direction:column}
+  .plan-opt:hover{border-color:var(--accent);box-shadow:0 12px 26px -18px rgba(34,164,71,.5);transform:translateY(-2px)}
+  .plan-opt.feat{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-weak),#fff 60%)}
+  .plan-opt .ribbon{position:absolute;top:-11px;inset-inline-start:16px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:5px}
+  .plan-opt .ribbon svg{width:12px;height:12px}
+  .plan-opt .o-name{font-size:16px;font-weight:800}
+  .plan-opt .o-users{font-size:12.5px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:6px}
+  .plan-opt .o-users svg{width:14px;height:14px}
+  .plan-opt .o-price{margin-top:16px;font-size:22px;font-weight:800;letter-spacing:-.01em}
+  .plan-opt .o-price small{font-size:12.5px;font-weight:600;color:var(--muted);margin-inline-start:4px}
+  .plan-opt .o-old{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .plan-opt .o-old s{color:#b9b9b6}
+  .plan-opt .o-save{color:var(--accent-strong);font-weight:700;margin-inline-start:6px}
+  .plan-opt .o-cta{margin-top:16px;justify-content:center;width:100%}
+
+  .sms-buy{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:22px;border-top:1px solid var(--line-2)}
+  .sms-buy .lbl{font-size:14px;font-weight:600}
+  .sms-buy .lbl span{color:var(--muted);font-weight:500;font-size:13px;display:block}
+  .pack-row{display:flex;gap:8px;flex-wrap:wrap;margin-inline-start:auto}
+  .pack{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .pack:hover{border-color:var(--warn);background:var(--warn-tint)}
+  .pack small{display:block;font-size:11px;color:var(--muted);font-weight:500}
+
+  /* ---------- Web panel (disabled) ---------- */
+  .panel-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:22px}
+  .panel-ic{width:48px;height:48px;border-radius:13px;background:#f1f1ef;color:var(--muted);display:grid;place-items:center;flex:none}
+  .panel-ic svg{width:25px;height:25px}
+  .panel-txt h3{font-size:16px;font-weight:800;display:flex;align-items:center;gap:9px}
+  .panel-txt p{font-size:13px;color:var(--muted);margin-top:2px;max-width:46ch}
+  .panel-cta .btn{margin-inline-start:auto}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* footer */
+  .foot{border-top:1px solid var(--line);background:#fff;margin-top:8px}
+  .foot-in{max-width:1180px;margin:0 auto;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+  .foot-in a{color:var(--muted);text-decoration:none}
+  .foot-in a:hover{color:var(--ink)}
+
+  .hint{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .hint svg{width:15px;height:15px;flex:none}
+
+  /* ---------- Responsive header ---------- */
+  @media (max-width:720px){
+    .nav-in{height:58px;padding:0 14px;gap:10px}
+    .nav-sep,.nav-crumb{display:none}
+    .nav-actions{gap:8px}
+    .btn-line .lbl-back{display:none}
+    .btn-line{padding:0 11px}
+    .user-chip{padding:4px;border:0;background:transparent}
+    .user-chip .u-txt{display:none}
+    .wrap{padding:24px 16px 60px}
+    .page-head h1{font-size:22px}
+    .page-head .btn-accent{width:100%;justify-content:center}
+    .page-head{margin-bottom:22px}
+    .card-h{padding:16px}
+    .card-pad{padding:16px}
+    .plan-hero .card-pad{padding:18px}
+    .sms-grid,.sms-buy{padding:16px}
+    .pack-row{margin-inline-start:0;width:100%}
+    .pack{flex:1}
+    thead th,tbody td{padding:13px 16px}
+  }
+</style>
+</head>
+<body>
+  <!-- ================= Header ================= -->
+  <header class="nav">
+    <div class="nav-in">
+      <a class="brand" href="index.html"><b></b>وت پلاس</a>
+      <span class="nav-sep" aria-hidden="true"></span>
+      <span class="nav-crumb">ناحیه کاربری</span>
+      <div class="nav-actions">
+        <a class="btn btn-line" href="index.html" aria-label="بازگشت به سایت">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          <span class="lbl-back">بازگشت به سایت</span>
+        </a>
+        <div class="user-chip">
+          <div class="u-txt">
+            <div class="u-name">دکتر رها کریمی</div>
+            <div class="u-role">کلینیک دامپزشکی مهر</div>
+          </div>
+          <span class="avatar" aria-hidden="true">ر ک</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Page head -->
+    <div class="page-head reveal">
+      <div>
+        <h1>سلام دکتر کریمی 👋</h1>
+        <p>وضعیت اشتراک، اعتبار پیامک و خریدهای شما یک‌جا در دسترس است.</p>
+      </div>
+      <a class="btn btn-accent" href="#buy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        افزودن / تمدید اشتراک
+      </a>
+    </div>
+
+    <!-- ===== Row 1: current plan + sms credit ===== -->
+    <div class="grid cols-2">
+      <!-- Current plan -->
+      <section class="card plan-hero reveal" aria-labelledby="plan-title">
+        <div class="card-pad">
+          <div class="plan-top">
+            <div class="plan-name">
+              <span class="plan-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </span>
+              <div>
+                <h3 id="plan-title">اشتراک سالانه</h3>
+                <div class="meta">پلن فعال شما · تا ۵ کاربر هم‌زمان</div>
+              </div>
+            </div>
+            <span class="badge ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              فعال
+            </span>
+          </div>
+
+          <div class="plan-stats">
+            <div class="stat">
+              <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>تاریخ شروع</span>
+              <span class="v">۱۴۰۴/۰۳/۱۵</span>
+            </div>
+            <div class="stat">
+              <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>تاریخ پایان</span>
+              <span class="v">۱۴۰۵/۰۳/۱۵</span>
+            </div>
+            <div class="stat">
+              <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>کاربران</span>
+              <span class="v">۳ <small>از ۵</small></span>
+            </div>
+          </div>
+
+          <div class="prog-wrap">
+            <div class="prog-top">
+              <span><b>اشتراک باقی‌مانده</b></span>
+              <span class="muted">۲۳۳ روز از ۳۶۵ روز</span>
+            </div>
+            <div class="bar"><i data-fill="64"></i></div>
+          </div>
+
+          <div class="plan-cta">
+            <a class="btn btn-accent" href="#buy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+              تمدید اشتراک
+            </a>
+            <a class="btn btn-line" href="#buy">ارتقای پلن</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SMS credit -->
+      <section class="card reveal" aria-labelledby="sms-title">
+        <div class="card-h">
+          <h2 id="sms-title">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            پنل پیامک
+          </h2>
+          <span class="badge info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            متصل
+          </span>
+        </div>
+        <div class="sms-grid">
+          <div class="mini">
+            <span class="k"><span class="dot amber" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>اعتبار باقی‌مانده</span>
+            <span class="v">۴۸۲٬۰۰۰<small>تومان</small></span>
+            <span class="foot">معادل حدود ۳٬۷۰۰ پیامک فارسی</span>
+          </div>
+          <div class="divider-v" aria-hidden="true"></div>
+          <div class="mini">
+            <span class="k"><span class="dot blue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>تعداد پیامک باقی‌مانده</span>
+            <span class="v">۳٬۷۲۰<small>پیامک</small></span>
+            <span class="foot">این ماه ۵۴۰ پیامک ارسال شده است</span>
+          </div>
+        </div>
+        <div class="sms-buy">
+          <div class="lbl">شارژ سریع پنل پیامک<span>بسته موردنظر را انتخاب کنید</span></div>
+          <div class="pack-row">
+            <button class="pack" type="button">۵۰۰ هزار<small>۲٬۰۰۰ پیامک</small></button>
+            <button class="pack" type="button">۱ میلیون<small>۴٬۲۰۰ پیامک</small></button>
+            <button class="pack" type="button">۲ میلیون<small>۹٬۰۰۰ پیامک</small></button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== Row 2: purchase history ===== -->
+    <section class="card reveal" style="margin-top:18px" aria-labelledby="hist-title">
+      <div class="card-h">
+        <h2 id="hist-title">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+          تاریخچه خریدها
+        </h2>
+        <a class="link" href="#">دانلود فاکتورها
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        </a>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>شناسه</th>
+              <th>محصول</th>
+              <th>تاریخ</th>
+              <th>مبلغ</th>
+              <th>وضعیت</th>
+              <th>فاکتور</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#VP-10428</td>
+              <td><div class="t-plan">اشتراک سالانه</div><div class="t-sub">تا ۵ کاربر · ۱۲ ماه</div></td>
+              <td>۱۴۰۴/۰۳/۱۵</td>
+              <td class="t-amount">۱۲٬۰۰۰٬۰۰۰ <span class="t-sub">تومان</span></td>
+              <td><span class="pay done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پرداخت شده</span></td>
+              <td><a class="link" href="#">مشاهده</a></td>
+            </tr>
+            <tr>
+              <td>#VP-10391</td>
+              <td><div class="t-plan">شارژ پنل پیامک</div><div class="t-sub">بسته ۴٬۲۰۰ پیامکی</div></td>
+              <td>۱۴۰۴/۰۳/۰۲</td>
+              <td class="t-amount">۱٬۰۰۰٬۰۰۰ <span class="t-sub">تومان</span></td>
+              <td><span class="pay done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پرداخت شده</span></td>
+              <td><a class="link" href="#">مشاهده</a></td>
+            </tr>
+            <tr>
+              <td>#VP-10233</td>
+              <td><div class="t-plan">شارژ پنل پیامک</div><div class="t-sub">بسته ۲٬۰۰۰ پیامکی</div></td>
+              <td>۱۴۰۴/۰۱/۲۰</td>
+              <td class="t-amount">۵۰۰٬۰۰۰ <span class="t-sub">تومان</span></td>
+              <td><span class="pay pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>در انتظار</span></td>
+              <td><a class="link" href="#">پیگیری</a></td>
+            </tr>
+            <tr>
+              <td>#VP-09980</td>
+              <td><div class="t-plan">اشتراک شش‌ماهه</div><div class="t-sub">تا ۴ کاربر · ۶ ماه</div></td>
+              <td>۱۴۰۳/۰۹/۱۰</td>
+              <td class="t-amount">۷٬۴۰۰٬۰۰۰ <span class="t-sub">تومان</span></td>
+              <td><span class="pay done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>پرداخت شده</span></td>
+              <td><a class="link" href="#">مشاهده</a></td>
+            </tr>
+            <tr>
+              <td>#VP-09604</td>
+              <td><div class="t-plan">دمو دو هفته‌ای</div><div class="t-sub">دسترسی کامل · رایگان</div></td>
+              <td>۱۴۰۳/۰۸/۲۲</td>
+              <td class="t-amount">۰ <span class="t-sub">تومان</span></td>
+              <td><span class="pay done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>رایگان</span></td>
+              <td><span class="t-sub">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Row 3: buy / add subscription ===== -->
+    <section class="card reveal" id="buy" style="margin-top:18px;scroll-margin-top:84px" aria-labelledby="buy-title">
+      <div class="card-h">
+        <h2 id="buy-title">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+          افزودن و خرید اشتراک
+        </h2>
+        <span class="hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          هرچه بلندمدت‌تر، مقرون‌به‌صرفه‌تر
+        </span>
+      </div>
+      <div class="card-pad">
+        <div class="buy">
+          <div class="plan-opt">
+            <div class="o-name">ماهانه</div>
+            <div class="o-users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>تا ۲ کاربر هم‌زمان</div>
+            <div class="o-price">۱٫۵<small>میلیون تومان</small></div>
+            <div class="o-old">هر ماه تمدید می‌شود</div>
+            <a class="btn btn-line o-cta" href="#">انتخاب</a>
+          </div>
+
+          <div class="plan-opt">
+            <div class="o-name">شش‌ماهه</div>
+            <div class="o-users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>تا ۴ کاربر هم‌زمان</div>
+            <div class="o-price">۷٫۴<small>میلیون تومان</small></div>
+            <div class="o-old">به‌جای <s>۹ میلیون</s><span class="o-save">۱٫۶ م صرفه‌جویی</span></div>
+            <a class="btn btn-line o-cta" href="#">انتخاب</a>
+          </div>
+
+          <div class="plan-opt feat">
+            <span class="ribbon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>پیشنهاد ویژه</span>
+            <div class="o-name">سالانه</div>
+            <div class="o-users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>تا ۵ کاربر هم‌زمان</div>
+            <div class="o-price">۱۲<small>میلیون تومان</small></div>
+            <div class="o-old">به‌جای <s>۱۸ میلیون</s><span class="o-save">۶ م صرفه‌جویی</span></div>
+            <a class="btn btn-accent o-cta" href="#">تمدید سالانه</a>
+          </div>
+        </div>
+
+        <p class="hint" style="margin-top:16px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          پرداخت امن از طریق درگاه بانکی · همهٔ قیمت‌ها به تومان و شامل به‌روزرسانی رایگان است.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== Row 4: web panel (disabled) ===== -->
+    <section class="card reveal" style="margin-top:18px" aria-labelledby="panel-title">
+      <div class="panel-cta">
+        <span class="panel-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </span>
+        <div class="panel-txt">
+          <h3 id="panel-title">ورود به پنل برنامهٔ تحت وب <span class="badge soft">به‌زودی</span></h3>
+          <p>نسخهٔ تحت وب نرم‌افزار وت پلاس در حال آماده‌سازی است و به‌زودی از همین‌جا در دسترس شما قرار می‌گیرد.</p>
+        </div>
+        <button class="btn btn-primary is-disabled" type="button" disabled aria-disabled="true" title="این قابلیت فعلاً غیرفعال است">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          ورود به پنل (غیرفعال)
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="foot">
+    <div class="foot-in">
+      <span>© ۱۴۰۴ وت پلاس — ناحیه کاربری</span>
+      <span><a href="index.html">خانه</a> · <a href="contact.html">پشتیبانی</a> · <a href="index.html#pricing">تعرفه‌ها</a></span>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  // reveal on scroll
+  var items = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:.12});
+    items.forEach(function(el){ io.observe(el); });
+  } else {
+    items.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // animate progress bars when visible
+  function fillBars(){
+    document.querySelectorAll('.bar > i[data-fill]').forEach(function(el){
+      var pct = parseFloat(el.getAttribute('data-fill'))||0;
+      if(pct <= 25){ el.parentElement.classList.add('warn'); }
+      requestAnimationFrame(function(){ el.style.width = pct + '%'; });
+    });
+  }
+  setTimeout(fillBars, 250);
+})();
+</script>
+</body>
+</html>
